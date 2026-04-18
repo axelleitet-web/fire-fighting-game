@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wildfire Incident Commander</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- CONTRACT SELECT -->
+  <div id="screen-contract" class="screen active">
+    <h1>WILDFIRE INCIDENT COMMANDER</h1>
+    <div id="player-info">
+      <span>Budget: $<b id="disp-budget">5000</b></span>
+      <span>Missions Completed: <b id="disp-done">0</b></span>
+    </div>
+    <div id="contract-cards"></div>
+    <div id="upgrade-section">
+      <h2>Equipment Upgrades</h2>
+      <div id="upgrade-cards"></div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game" class="screen">
+    <div id="topbar">
+      <div id="mission-info">
+        <span id="disp-mission-name">---</span>
+        <span id="disp-timer">0:00</span>
+      </div>
+      <div id="wind-panel">
+        <div id="wind-label">WIND</div>
+        <canvas id="wind-canvas" width="52" height="52"></canvas>
+        <div id="wind-text">
+          <div id="disp-wind-dir">---</div>
+          <div id="disp-wind-str">---</div>
+        </div>
+        <div id="wind-change-wrap">
+          <div id="wind-change-label">Changes in:</div>
+          <div id="wind-change-bar"><div id="wind-change-fill"></div></div>
+        </div>
+      </div>
+      <div id="resource-panel">
+        <div>Water: <b id="disp-water">0</b></div>
+        <div>Budget: $<b id="disp-money">0</b></div>
+      </div>
+      <div id="game-btns">
+        <button id="btn-pause">Pause</button>
+        <button id="btn-quit">Quit</button>
+      </div>
+    </div>
+    <div id="game-main">
+      <div id="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+        <div id="danger-warn" class="hidden">FIREFIGHTER IN DANGER!</div>
+      </div>
+      <div id="sidebar">
+        <div class="sb-section">
+          <div class="sb-title">ACTIONS</div>
+          <div id="action-btns"></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">FIREFIGHTERS</div>
+          <div id="ff-list"></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">AIR SUPPORT</div>
+          <div id="aerial-list"></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">FIRE STATUS</div>
+          <div id="fire-status-info"></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-title">SELECTED</div>
+          <div id="selected-info">Nothing selected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="screen">
+    <div id="result-box">
+      <div id="result-rating-badge"></div>
+      <h2 id="result-title"></h2>
+      <div id="result-stats-list"></div>
+      <div id="result-payout"></div>
+      <button id="btn-continue">Continue</button>
+    </div>
+  </div>
+
+  <!-- PAUSE OVERLAY -->
+  <div id="overlay-pause" class="hidden">
+    <div id="pause-box">
+      <h2>PAUSED</h2>
+      <button id="btn-resume">Resume</button>
+      <button id="btn-restart">Restart</button>
+      <button id="btn-menu">Main Menu</button>
+    </div>
+  </div>
+
+</div>
+<script src="js/config.js"></script>
+<script src="js/contracts.js"></script>
+<script src="js/wind.js"></script>
+<script src="js/map.js"></script>
+<script src="js/fire.js"></script>
+<script src="js/units.js"></script>
+<script src="js/upgrades.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
