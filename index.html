@@ -3,12 +3,394 @@
 <head>
   <meta charset="UTF-8">
   <title>Wildfire Incident Commander</title>
-  <link rel="stylesheet" href="css/style.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #111827;
+  color: #e5e7eb;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.screen { display: none; width: 100vw; height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+.hidden { display: none !important; }
+
+/* ===== CONTRACT SELECT ===== */
+#screen-contract {
+  align-items: center;
+  padding: 30px 20px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+}
+
+#screen-contract h1 {
+  color: #f97316;
+  font-size: 2em;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(249,115,22,0.5);
+}
+
+#player-info {
+  margin-bottom: 25px;
+  display: flex;
+  gap: 40px;
+  font-size: 1.1em;
+}
+#player-info b { color: #fbbf24; }
+
+#contract-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contract-card {
+  background: #1f2937;
+  border: 2px solid #374151;
+  border-radius: 10px;
+  padding: 20px;
+  width: 260px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.1s;
+}
+.contract-card:hover { border-color: #f97316; transform: translateY(-2px); }
+.contract-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.contract-card.completed { border-color: #16a34a; }
+.contract-card h3 { color: #f97316; margin-bottom: 8px; font-size: 1em; }
+.contract-card .c-desc { color: #9ca3af; margin-bottom: 12px; font-size: 0.85em; line-height: 1.4; }
+.contract-card .c-row { display: flex; justify-content: space-between; margin: 4px 0; font-size: 0.82em; }
+.contract-card .c-label { color: #6b7280; }
+.contract-card .c-val { color: #e5e7eb; }
+.contract-card .c-reward { color: #fbbf24; font-weight: bold; margin-top: 10px; font-size: 0.9em; }
+.contract-card .c-completed { color: #4ade80; font-size: 0.8em; margin-top: 4px; }
+
+#upgrade-section { width: 100%; max-width: 900px; }
+#upgrade-section h2 { color: #fbbf24; text-align: center; margin-bottom: 15px; font-size: 1.1em; }
+#upgrade-cards { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+
+.upgrade-card {
+  background: #1f2937;
+  border: 2px solid #374151;
+  border-radius: 8px;
+  padding: 14px;
+  width: 190px;
+}
+.upgrade-card h4 { color: #f87171; margin-bottom: 6px; font-size: 0.9em; }
+.upgrade-card .up-desc { color: #9ca3af; font-size: 0.78em; margin-bottom: 8px; line-height: 1.3; }
+.upgrade-card .up-level { color: #6b7280; font-size: 0.78em; margin-bottom: 8px; }
+.upgrade-card button {
+  width: 100%;
+  padding: 6px;
+  background: #374151;
+  border: 1px solid #4b5563;
+  color: #e5e7eb;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82em;
+}
+.upgrade-card button:hover { background: #f97316; border-color: #f97316; color: #fff; }
+.upgrade-card button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ===== TOP BAR ===== */
+#topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 14px;
+  background: #0f172a;
+  border-bottom: 2px solid #1f2937;
+  height: 58px;
+  flex-shrink: 0;
+}
+
+#mission-info { display: flex; flex-direction: column; min-width: 160px; }
+#disp-mission-name { color: #f97316; font-weight: bold; font-size: 0.95em; }
+#disp-timer { color: #9ca3af; font-size: 0.85em; }
+
+#wind-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+#wind-label { color: #60a5fa; font-weight: bold; font-size: 0.85em; letter-spacing: 1px; }
+#wind-text { display: flex; flex-direction: column; }
+#disp-wind-dir { color: #93c5fd; font-weight: bold; font-size: 1.1em; }
+#disp-wind-str { font-size: 0.78em; }
+.str-light { color: #86efac; }
+.str-moderate { color: #fbbf24; }
+.str-strong { color: #f87171; font-weight: bold; }
+
+#wind-change-wrap { display: flex; flex-direction: column; gap: 3px; }
+#wind-change-label { color: #6b7280; font-size: 0.7em; }
+#wind-change-bar {
+  width: 70px;
+  height: 6px;
+  background: #374151;
+  border-radius: 3px;
+  overflow: hidden;
+}
+#wind-change-fill {
+  height: 100%;
+  background: #60a5fa;
+  width: 100%;
+  transition: width 0.5s linear;
+}
+
+#resource-panel { display: flex; flex-direction: column; gap: 4px; }
+#resource-panel div { font-size: 0.88em; }
+#resource-panel b { color: #4ade80; }
+
+#game-btns { margin-left: auto; display: flex; gap: 8px; }
+#game-btns button {
+  padding: 6px 14px;
+  background: #1f2937;
+  border: 1px solid #4b5563;
+  color: #e5e7eb;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+}
+#game-btns button:hover { background: #374151; }
+
+/* ===== MAIN GAME AREA ===== */
+#game-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+#canvas-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: #000;
+  flex: 1;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  cursor: crosshair;
+  image-rendering: pixelated;
+}
+
+#danger-warn {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #dc2626;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1em;
+  letter-spacing: 1px;
+  animation: pulse-warn 0.5s infinite alternate;
+  z-index: 10;
+  pointer-events: none;
+}
+@keyframes pulse-warn {
+  from { opacity: 0.7; box-shadow: 0 0 6px rgba(220,38,38,0.5); }
+  to   { opacity: 1;   box-shadow: 0 0 18px rgba(220,38,38,0.9); }
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  width: 215px;
+  background: #0f172a;
+  border-left: 2px solid #1f2937;
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding: 8px;
+}
+
+.sb-section { margin-bottom: 12px; }
+.sb-title {
+  color: #f97316;
+  font-size: 0.75em;
+  letter-spacing: 2px;
+  border-bottom: 1px solid #1f2937;
+  padding-bottom: 4px;
+  margin-bottom: 7px;
+}
+
+/* Action buttons */
+.act-btn {
+  width: 100%;
+  padding: 7px 8px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78em;
+  text-align: left;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.act-btn:hover { border-color: #f97316; background: #1a2435; }
+.act-btn.active { border-color: #f97316; background: #2c1600; color: #fed7aa; }
+.act-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+.act-btn .act-cost { color: #fbbf24; font-size: 0.85em; }
+.act-btn .act-hint { color: #6b7280; font-size: 0.8em; font-style: italic; }
+
+/* Firefighter list */
+.ff-item {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  padding: 5px 7px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  font-size: 0.78em;
+}
+.ff-item:hover { border-color: #60a5fa; }
+.ff-item.selected { border-color: #fbbf24; background: #1a1a0a; }
+.ff-item.danger { border-color: #ef4444; animation: pulse-warn 0.4s infinite alternate; }
+.ff-item .ff-name { font-weight: bold; color: #e5e7eb; }
+.ff-item .ff-hp { margin-top: 3px; }
+.hp-bar { width: 100%; height: 5px; background: #374151; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+.hp-fill { height: 100%; background: #4ade80; transition: width 0.2s; }
+.hp-fill.mid { background: #fbbf24; }
+.hp-fill.low { background: #ef4444; }
+.ff-status { color: #6b7280; font-style: italic; margin-top: 2px; }
+
+/* Aerial list */
+.aerial-item {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  font-size: 0.78em;
+}
+.aerial-name { color: #93c5fd; font-weight: bold; margin-bottom: 3px; }
+.aerial-cd { color: #9ca3af; margin-top: 2px; }
+.aerial-cd.ready { color: #4ade80; font-weight: bold; }
+.cd-bar { width: 100%; height: 5px; background: #374151; border-radius: 2px; overflow: hidden; margin-top: 3px; }
+.cd-fill { height: 100%; background: #60a5fa; }
+.cd-fill.ready { background: #4ade80; }
+
+/* Fire status */
+#fire-status-info div { font-size: 0.8em; margin-bottom: 5px; color: #9ca3af; }
+#fire-status-info b { color: #e5e7eb; }
+.burn-bar { width: 100%; height: 8px; background: #374151; border-radius: 3px; overflow: hidden; margin-top: 3px; }
+.burn-fill { height: 100%; background: linear-gradient(90deg, #fbbf24, #ef4444); }
+
+/* Selected info */
+#selected-info { font-size: 0.78em; color: #9ca3af; line-height: 1.6; }
+#selected-info b { color: #e5e7eb; }
+
+/* ===== RESULT SCREEN ===== */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.88);
+}
+
+#result-box {
+  background: #1f2937;
+  border: 2px solid #f97316;
+  border-radius: 14px;
+  padding: 40px 50px;
+  text-align: center;
+  max-width: 520px;
+  width: 90%;
+}
+
+#result-rating-badge {
+  font-size: 4em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.rating-S { color: #fbbf24; text-shadow: 0 0 20px rgba(251,191,36,0.8); }
+.rating-A { color: #4ade80; }
+.rating-B { color: #60a5fa; }
+.rating-C { color: #9ca3af; }
+.rating-FAIL { color: #ef4444; }
+
+#result-title { margin-bottom: 20px; color: #e5e7eb; font-size: 1.4em; }
+
+#result-stats-list { text-align: left; margin: 15px 0; }
+.rs-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #374151; font-size: 0.88em; }
+.rs-row:last-child { border-bottom: none; }
+.rs-label { color: #9ca3af; }
+.rs-val { color: #fbbf24; font-weight: bold; }
+.rs-val.good { color: #4ade80; }
+.rs-val.bad { color: #ef4444; }
+
+#result-payout { font-size: 1.5em; color: #4ade80; font-weight: bold; margin: 18px 0; }
+
+#btn-continue {
+  padding: 12px 35px;
+  background: #f97316;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+#btn-continue:hover { background: #ea580c; }
+
+/* ===== PAUSE OVERLAY ===== */
+#overlay-pause {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+#pause-box {
+  background: #1f2937;
+  border: 2px solid #f97316;
+  border-radius: 12px;
+  padding: 40px 50px;
+  text-align: center;
+}
+#pause-box h2 { color: #f97316; font-size: 1.8em; letter-spacing: 3px; margin-bottom: 25px; }
+#pause-box button {
+  display: block;
+  width: 200px;
+  margin: 10px auto;
+  padding: 10px;
+  background: #374151;
+  border: 1px solid #4b5563;
+  color: #e5e7eb;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.95em;
+}
+#pause-box button:hover { background: #f97316; border-color: #f97316; }
+</style>
 </head>
 <body>
 <div id="app">
-
-  <!-- CONTRACT SELECT -->
   <div id="screen-contract" class="screen active">
     <h1>WILDFIRE INCIDENT COMMANDER</h1>
     <div id="player-info">
@@ -21,8 +403,6 @@
       <div id="upgrade-cards"></div>
     </div>
   </div>
-
-  <!-- GAME -->
   <div id="screen-game" class="screen">
     <div id="topbar">
       <div id="mission-info">
@@ -79,8 +459,6 @@
       </div>
     </div>
   </div>
-
-  <!-- RESULT -->
   <div id="screen-result" class="screen">
     <div id="result-box">
       <div id="result-rating-badge"></div>
@@ -90,8 +468,6 @@
       <button id="btn-continue">Continue</button>
     </div>
   </div>
-
-  <!-- PAUSE OVERLAY -->
   <div id="overlay-pause" class="hidden">
     <div id="pause-box">
       <h2>PAUSED</h2>
@@ -100,16 +476,1758 @@
       <button id="btn-menu">Main Menu</button>
     </div>
   </div>
-
 </div>
-<script src="js/config.js"></script>
-<script src="js/contracts.js"></script>
-<script src="js/wind.js"></script>
-<script src="js/map.js"></script>
-<script src="js/fire.js"></script>
-<script src="js/units.js"></script>
-<script src="js/upgrades.js"></script>
-<script src="js/renderer.js"></script>
-<script src="js/game.js"></script>
+<script>
+// ============================================================
+// GAME CONSTANTS
+// ============================================================
+
+const GRID = 30;
+const TILE_PX = 20; // pixels per tile
+
+// Tile types
+const T = { FOREST: 0, GRASS: 1, WATER: 2, ROCK: 3, BREAK: 4 };
+const T_COLOR  = { 0: '#2a5e1e', 1: '#5a9e35', 2: '#1a5f8e', 3: '#787878', 4: '#8b7355' };
+const T_NAME   = { 0: 'Forest', 1: 'Grass', 2: 'Water', 3: 'Rock', 4: 'Firebreak' };
+// How quickly fire spreads through each tile type (0 = fireproof)
+const T_FLAM   = { 0: 1.6, 1: 1.0, 2: 0, 3: 0, 4: 0.05 };
+
+// Wind directions: index = direction, value = [dx, dy]
+// 0=N, 1=NE, 2=E, 3=SE, 4=S, 5=SW, 6=W, 7=NW
+const W_NAME  = ['N','NE','E','SE','S','SW','W','NW'];
+const W_VEC   = [[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
+const W_STR_NAME = { 1:'Light', 2:'Moderate', 3:'Strong' };
+
+// How much wind multiplies fire spread in the downwind direction
+const W_SPREAD_MULT = { 1: 2.0, 2: 3.8, 3: 6.5 };
+
+// Fire
+const FIRE_MAX   = 5;
+const FIRE_EVERY = 4;            // update fire every N ticks
+const FIRE_BASE  = 0.0045;       // base spread chance per fire-update
+const FIRE_GROW  = 0.007;        // chance per tick that burning tile gains +1 intensity
+const BURN_OUT   = 480;          // ticks before a burning tile becomes fully charred
+
+// Game tick
+const TICK_MS = 50; // ms per tick (20 ticks/sec)
+
+// Wind change timing (ms)
+const WIND_CHG_MIN = 22000;
+const WIND_CHG_MAX = 42000;
+
+// Firefighter risk (checked every N ticks)
+const RISK_EVERY  = 38;
+const RISK_CHANCE = { 1: 0.10, 2: 0.22, 3: 0.45 };
+const RISK_DMG    = 30;
+const FF_HP_MAX   = 100;
+
+// Firefighter suppression (per tick standing on burning tile)
+const FF_SUPP_RATE   = 0.045; // intensity units reduced per tick
+const FF_MOVE_TICKS  = 16;    // ticks to traverse one tile
+const FF_BREAK_TICKS = 110;   // ticks to create a firebreak
+
+// Aerial units
+const HELI_COOLDOWN_MS = 15000;
+const HELI_WATER_COST  = 65;
+const HELI_INTENSITY_REDUCE = 5; // fully extinguishes center + reduces neighbors
+
+const PLANE_COOLDOWN_MS = 35000;
+const PLANE_WATER_COST  = 200;
+const PLANE_LINE        = 6; // tiles dropped in a line
+
+// Deploy costs (budget)
+const COST_FF   = 350;
+const COST_HELI = 0; // already assigned per contract; extra helis cost more
+
+// Win/lose thresholds
+const BURN_LOSE_PCT = 0.50; // fraction of flammable tiles that triggers loss
+// ============================================================
+// CONTRACT / MISSION DEFINITIONS
+// ============================================================
+
+const CONTRACTS = [
+  {
+    id: 0,
+    name: 'Ranch Fire',
+    subtitle: 'Light winds, manageable blaze',
+    description: 'A fire has broken out in the Thornridge Ranch. Grass and sparse forest. Wind is light but picking up.',
+    difficulty: 'EASY',
+    requiredDone: 0,
+    baseReward: 1800,
+    timeLimitSec: 240,
+    startWind: { dir: 2, str: 1 }, // E, Light
+    waterSupply: 700,
+    startBudget: 1200,
+    startFF: 3,
+    startHeli: 1,
+    startPlane: 0,
+    mapSeed: 42,
+    mapConfig: {
+      forestRatio: 0.45,
+      grassRatio:  0.40,
+      rockRatio:   0.05,
+      waterBodies: [{ type:'river', axis:'y', pos:22, width:2 }],
+      fireStarts: [[5, 5], [6, 7]],
+    },
+  },
+  {
+    id: 1,
+    name: 'Mountain Ridge Blaze',
+    subtitle: 'Moderate winds, rocky terrain',
+    description: 'A wildfire is racing up the Creston Ridge. Dense forest, rock outcrops. Moderate SE winds fan the flames.',
+    difficulty: 'MEDIUM',
+    requiredDone: 1,
+    baseReward: 3000,
+    timeLimitSec: 300,
+    startWind: { dir: 3, str: 2 }, // SE, Moderate
+    waterSupply: 850,
+    startBudget: 1600,
+    startFF: 4,
+    startHeli: 1,
+    startPlane: 1,
+    mapSeed: 137,
+    mapConfig: {
+      forestRatio: 0.55,
+      grassRatio:  0.25,
+      rockRatio:   0.12,
+      waterBodies: [{ type:'lake', cx:22, cy:22, r:3 }],
+      fireStarts: [[6, 3], [8, 5], [4, 7]],
+    },
+  },
+  {
+    id: 2,
+    name: 'Valley Inferno',
+    subtitle: 'Strong winds, multi-point fire',
+    description: 'Two simultaneous ignitions in Ashvale Valley. Strong SW winds. Dense forest. This is your toughest test yet.',
+    difficulty: 'HARD',
+    requiredDone: 2,
+    baseReward: 4800,
+    timeLimitSec: 360,
+    startWind: { dir: 5, str: 3 }, // SW, Strong
+    waterSupply: 1100,
+    startBudget: 2200,
+    startFF: 5,
+    startHeli: 2,
+    startPlane: 1,
+    mapSeed: 999,
+    mapConfig: {
+      forestRatio: 0.65,
+      grassRatio:  0.22,
+      rockRatio:   0.06,
+      waterBodies: [
+        { type:'river', axis:'x', pos:14, width:2 },
+      ],
+      fireStarts: [[4, 4], [5, 5], [24, 6], [25, 7], [25, 5]],
+    },
+  },
+];
+
+function getContract(id) {
+  return CONTRACTS.find(c => c.id === id);
+}
+// ============================================================
+// WIND SYSTEM
+// ============================================================
+
+function windCreate(dir, str) {
+  const changeIn = WIND_CHG_MIN + Math.random() * (WIND_CHG_MAX - WIND_CHG_MIN);
+  return {
+    dir,         // 0-7
+    str,         // 1-3
+    changeIn,    // ms until next change
+    changeTotal: changeIn,
+    changing: false,
+    changeFlash: 0,
+  };
+}
+
+function windUpdate(wind, dt) {
+  wind.changeIn -= dt;
+  if (wind.changeIn <= 0) {
+    // Change wind
+    wind.changing = true;
+    wind.changeFlash = 120; // flash frames
+
+    // Shift direction by ±1 or ±2, or sometimes bigger jump
+    const roll = Math.random();
+    let shift;
+    if (roll < 0.45)      shift = 1;
+    else if (roll < 0.80) shift = -1;
+    else if (roll < 0.92) shift = 2;
+    else                   shift = -2;
+
+    wind.dir = ((wind.dir + shift) + 8) % 8;
+
+    // Possibly change strength
+    const strRoll = Math.random();
+    if (strRoll < 0.3) {
+      wind.str = Math.max(1, Math.min(3, wind.str + (Math.random() < 0.5 ? 1 : -1)));
+    }
+
+    const next = WIND_CHG_MIN + Math.random() * (WIND_CHG_MAX - WIND_CHG_MIN);
+    wind.changeIn = next;
+    wind.changeTotal = next;
+  }
+
+  if (wind.changeFlash > 0) wind.changeFlash--;
+}
+
+// Returns the direction vector [dx, dy] for the current wind
+function windVec(wind) { return W_VEC[wind.dir]; }
+
+// Returns fraction [0,1] of progress until next wind change
+function windChangePct(wind) { return 1 - wind.changeIn / wind.changeTotal; }
+// ============================================================
+// MAP GENERATION
+// ============================================================
+
+function makeLCG(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function mapGenerate(contract) {
+  const cfg = contract.mapConfig;
+  const rng = makeLCG(contract.mapSeed);
+  const tiles = [];
+
+  // Fill base tiles
+  for (let y = 0; y < GRID; y++) {
+    tiles[y] = [];
+    for (let x = 0; x < GRID; x++) {
+      const r = rng();
+      let type;
+      if      (r < cfg.forestRatio)                          type = T.FOREST;
+      else if (r < cfg.forestRatio + cfg.grassRatio)         type = T.GRASS;
+      else if (r < cfg.forestRatio + cfg.grassRatio + cfg.rockRatio) type = T.ROCK;
+      else                                                   type = T.GRASS;
+
+      tiles[y][x] = makeTile(type);
+    }
+  }
+
+  // Add water bodies (use copies to avoid mutating the contract definition)
+  for (const wbOrig of cfg.waterBodies) {
+    const wb = Object.assign({}, wbOrig);
+    if (wb.type === 'river') {
+      if (wb.axis === 'y') {
+        // Vertical river at column `pos`
+        for (let y = 0; y < GRID; y++) {
+          for (let dx = 0; dx < wb.width; dx++) {
+            const x = wb.pos + dx;
+            if (x >= 0 && x < GRID) tiles[y][x] = makeTile(T.WATER);
+          }
+          // Meander a bit
+          if (rng() < 0.2) wb.pos += rng() < 0.5 ? 1 : -1;
+          wb.pos = Math.max(1, Math.min(GRID - wb.width - 1, wb.pos));
+        }
+      } else {
+        // Horizontal river at row `pos`
+        for (let x = 0; x < GRID; x++) {
+          for (let dy = 0; dy < wb.width; dy++) {
+            const y = wb.pos + dy;
+            if (y >= 0 && y < GRID) tiles[y][x] = makeTile(T.WATER);
+          }
+          if (rng() < 0.2) wb.pos += rng() < 0.5 ? 1 : -1;
+          wb.pos = Math.max(1, Math.min(GRID - wb.width - 1, wb.pos));
+        }
+      }
+    } else if (wb.type === 'lake') {
+      const { cx, cy, r } = wb;
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          if (dx * dx + dy * dy <= r * r) {
+            const nx = cx + dx, ny = cy + dy;
+            if (nx >= 0 && nx < GRID && ny >= 0 && ny < GRID) {
+              tiles[ny][nx] = makeTile(T.WATER);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Place initial fires
+  for (const [fx, fy] of cfg.fireStarts) {
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const nx = fx + dx, ny = fy + dy;
+        if (nx < 0 || nx >= GRID || ny < 0 || ny >= GRID) continue;
+        const tile = tiles[ny][nx];
+        if (tile.type !== T.WATER && tile.type !== T.ROCK) {
+          tile.fireIntensity = 3;
+          tile.burnTime = 0;
+        }
+      }
+    }
+  }
+
+  return tiles;
+}
+
+function makeTile(type) {
+  return { type, fireIntensity: 0, burnTime: 0, burned: false, firebreak: false };
+}
+
+function tileAt(map, x, y) {
+  if (x < 0 || x >= GRID || y < 0 || y >= GRID) return null;
+  return map[y][x];
+}
+
+// Count all flammable tiles (non-water, non-rock)
+function countFlammable(map) {
+  let n = 0;
+  for (let y = 0; y < GRID; y++)
+    for (let x = 0; x < GRID; x++) {
+      const t = map[y][x].type;
+      if (t !== T.WATER && t !== T.ROCK) n++;
+    }
+  return n;
+}
+
+// Count burned (charred) tiles
+function countBurned(map) {
+  let n = 0;
+  for (let y = 0; y < GRID; y++)
+    for (let x = 0; x < GRID; x++)
+      if (map[y][x].burned) n++;
+  return n;
+}
+
+// Count tiles with active fire
+function countFire(map) {
+  let n = 0;
+  for (let y = 0; y < GRID; y++)
+    for (let x = 0; x < GRID; x++)
+      if (map[y][x].fireIntensity > 0) n++;
+  return n;
+}
+// ============================================================
+// FIRE SYSTEM
+// ============================================================
+
+// 8-neighbor offsets
+const NEIGHBORS = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+
+function fireUpdate(map, wind) {
+  // Use a change list so we don't double-process within one tick
+  const changes = []; // { x, y, deltaIntensity, setBurned }
+
+  for (let y = 0; y < GRID; y++) {
+    for (let x = 0; x < GRID; x++) {
+      const tile = map[y][x];
+      if (tile.fireIntensity <= 0 || tile.burned) continue;
+
+      // Grow intensity
+      if (tile.fireIntensity < FIRE_MAX && Math.random() < FIRE_GROW * wind.str) {
+        changes.push({ x, y, deltaIntensity: 1 });
+      }
+
+      // Advance burn time; extinguish when exhausted
+      tile.burnTime++;
+      if (tile.burnTime >= BURN_OUT) {
+        changes.push({ x, y, setBurned: true });
+        continue;
+      }
+
+      // Spread to neighbors
+      const wv = W_VEC[wind.dir];
+      for (const [dx, dy] of NEIGHBORS) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || nx >= GRID || ny < 0 || ny >= GRID) continue;
+        const neighbor = map[ny][nx];
+        if (neighbor.fireIntensity > 0 || neighbor.burned || neighbor.firebreak) continue;
+        if (T_FLAM[neighbor.type] === 0) continue;
+
+        // Dot product of spread vector with wind vector (both unit-ish)
+        const dot = dx * wv[0] + dy * wv[1];
+        // dot ranges from -2 (diagonal against) to 2 (diagonal with)
+        const norm = Math.sqrt(dx*dx + dy*dy);
+        const alignment = dot / norm; // -1.4 to +1.4 for diagonals
+
+        let chance = FIRE_BASE * T_FLAM[neighbor.type] * (tile.fireIntensity / FIRE_MAX);
+
+        if (alignment > 0) {
+          // Downwind: wind greatly amplifies
+          chance *= 1 + alignment * W_SPREAD_MULT[wind.str];
+        } else {
+          // Upwind: wind suppresses
+          chance *= Math.max(0.05, 1 + alignment * 0.6);
+        }
+
+        if (Math.random() < chance) {
+          changes.push({ x: nx, y: ny, deltaIntensity: 1 });
+        }
+      }
+    }
+  }
+
+  // Apply changes (deduplicate: only first change per tile)
+  const seen = new Set();
+  for (const ch of changes) {
+    const key = ch.y * GRID + ch.x;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const tile = map[ch.y][ch.x];
+    if (ch.setBurned) {
+      tile.burned = true;
+      tile.fireIntensity = 0;
+      tile.burnTime = 0;
+    } else if (ch.deltaIntensity) {
+      tile.fireIntensity = Math.min(FIRE_MAX, tile.fireIntensity + ch.deltaIntensity);
+    }
+  }
+}
+
+// Suppress fire at tile (x,y) by `amount` intensity
+function fireSuppressAt(map, x, y, amount) {
+  const tile = tileAt(map, x, y);
+  if (!tile || tile.burned) return;
+  tile.fireIntensity = Math.max(0, tile.fireIntensity - amount);
+  if (tile.fireIntensity === 0) tile.burnTime = 0;
+}
+
+// Water drop: helicopter drops on center + reduces neighbors slightly
+function fireHeliDrop(map, x, y, intensityReduction) {
+  fireSuppressAt(map, x, y, intensityReduction);
+  for (const [dx, dy] of NEIGHBORS) {
+    fireSuppressAt(map, x + dx, y + dy, intensityReduction * 0.45);
+  }
+}
+
+// Plane run: drops a water line perpendicular to wind at (startX,startY).
+// planeLine: number of tiles to cover (pass upgrade-adjusted value)
+function firePlaneRun(map, startX, startY, wind, planeLine) {
+  planeLine = planeLine || PLANE_LINE;
+  const wv = W_VEC[wind.dir];
+  const perpDx = -wv[1], perpDy = wv[0]; // 90° rotation = perpendicular
+  const half = Math.floor(planeLine / 2);
+  for (let i = -half; i <= half; i++) {
+    const tx = Math.round(startX + perpDx * i);
+    const ty = Math.round(startY + perpDy * i);
+    fireSuppressAt(map, tx, ty, 4);
+    fireSuppressAt(map, tx + wv[0], ty + wv[1], 2);
+  }
+}
+
+// Compute danger zones: tiles downwind of active fires (3-tile reach)
+function getDangerZones(map, wind) {
+  const zones = new Set();
+  const wv = W_VEC[wind.dir];
+  for (let y = 0; y < GRID; y++) {
+    for (let x = 0; x < GRID; x++) {
+      if (map[y][x].fireIntensity < 2) continue;
+      for (let dist = 1; dist <= 3; dist++) {
+        const nx = Math.round(x + wv[0] * dist);
+        const ny = Math.round(y + wv[1] * dist);
+        if (nx >= 0 && nx < GRID && ny >= 0 && ny < GRID) {
+          zones.add(ny * GRID + nx);
+        }
+      }
+    }
+  }
+  return zones;
+}
+// ============================================================
+// UNITS SYSTEM
+// ============================================================
+
+let _ffIdSeq = 0;
+
+function ffCreate(x, y) {
+  return {
+    id: _ffIdSeq++,
+    x, y,
+    hp: FF_HP_MAX,
+    maxHp: FF_HP_MAX,
+    // Movement
+    moving: false,
+    targetX: x, targetY: y,
+    moveProg: 0,   // ticks remaining to reach target
+    // Firebreak
+    makingBreak: false,
+    breakProgress: 0,
+    breakX: -1, breakY: -1,
+    // Risk
+    inDanger: false,
+    riskTick: 0,
+    // Status label
+    status: 'Idle',
+  };
+}
+
+// Create aerial unit descriptor
+function aerialCreate(type, count) {
+  const isHeli = type === 'helicopter';
+  return {
+    type,
+    label: isHeli ? 'Helicopter' : 'Plane',
+    count,
+    cooldownMs: 0,
+    maxCooldownMs: isHeli ? HELI_COOLDOWN_MS : PLANE_COOLDOWN_MS,
+    waterCost: isHeli ? HELI_WATER_COST : PLANE_WATER_COST,
+    ready: true,
+  };
+}
+
+// Move a firefighter toward its target (call each tick)
+function ffUpdateMovement(ff) {
+  if (!ff.moving) return;
+  ff.moveProg--;
+  if (ff.moveProg <= 0) {
+    ff.x = ff.targetX;
+    ff.y = ff.targetY;
+    ff.moving = false;
+    ff.status = 'Idle';
+  }
+}
+
+// Order a firefighter to move to (tx, ty).
+// moveTicks: ticks per tile (pass upgrade-adjusted value from game.js)
+function ffMoveTo(ff, tx, ty, moveTicks) {
+  if (ff.x === tx && ff.y === ty) return;
+  moveTicks = moveTicks || FF_MOVE_TICKS;
+  ff.targetX = tx;
+  ff.targetY = ty;
+  const dist = Math.max(Math.abs(tx - ff.x), Math.abs(ty - ff.y));
+  ff.moving = true;
+  ff.moveProg = dist * moveTicks;
+  ff.makingBreak = false;
+  ff.status = 'Moving';
+}
+
+// Order a firefighter to create firebreak at (tx, ty)
+function ffStartFirebreak(ff, map, tx, ty) {
+  const tile = tileAt(map, tx, ty);
+  if (!tile || tile.fireIntensity > 0 || tile.type === T.WATER || tile.type === T.ROCK) return false;
+  if (tile.firebreak || tile.burned) return false;
+  ff.makingBreak = true;
+  ff.breakProgress = FF_BREAK_TICKS;
+  ff.breakX = tx;
+  ff.breakY = ty;
+  ff.status = 'Firebreak';
+  return true;
+}
+
+// Tick firefighter firebreak construction
+function ffUpdateFirebreak(ff, map) {
+  if (!ff.makingBreak) return;
+  ff.breakProgress--;
+  if (ff.breakProgress <= 0) {
+    const tile = tileAt(map, ff.breakX, ff.breakY);
+    if (tile) {
+      tile.type = T.BREAK;
+      tile.firebreak = true;
+      tile.fireIntensity = 0;
+    }
+    ff.makingBreak = false;
+    ff.status = 'Idle';
+  }
+}
+
+// Passive suppression: reduce fire intensity on current tile
+function ffSuppressTile(ff, map) {
+  const tile = tileAt(map, ff.x, ff.y);
+  if (!tile || tile.fireIntensity <= 0) return;
+  tile.fireIntensity = Math.max(0, tile.fireIntensity - FF_SUPP_RATE);
+  if (tile.fireIntensity === 0) tile.burnTime = 0;
+  ff.status = 'Suppressing';
+}
+
+// Check if firefighter is in danger; updates ff.inDanger.
+// Damage is applied by the caller using upgrade-adjusted values.
+function ffCheckDanger(ff, map, wind, tick) {
+  if (tick % RISK_EVERY !== 0) return;
+
+  const wv = W_VEC[wind.dir];
+  let fireThreat = false;
+
+  // Standing on burning tile
+  const cur = tileAt(map, ff.x, ff.y);
+  if (cur && cur.fireIntensity >= 2) fireThreat = true;
+
+  if (!fireThreat) {
+    // Fire is upwind and heading toward this firefighter
+    for (let dist = 1; dist <= 2; dist++) {
+      const ux = Math.round(ff.x - wv[0] * dist);
+      const uy = Math.round(ff.y - wv[1] * dist);
+      const upwindTile = tileAt(map, ux, uy);
+      if (upwindTile && upwindTile.fireIntensity >= 2) {
+        fireThreat = true;
+        break;
+      }
+    }
+  }
+
+  ff.inDanger = fireThreat;
+}
+
+// Update aerial cooldowns
+function aerialUpdate(aerial, dt) {
+  if (aerial.cooldownMs > 0) {
+    aerial.cooldownMs = Math.max(0, aerial.cooldownMs - dt);
+  }
+  aerial.ready = aerial.cooldownMs === 0;
+}
+
+// Deploy aerial unit; returns true if successful
+function aerialDeploy(aerial, water) {
+  if (!aerial.ready || aerial.count <= 0) return false;
+  if (water < aerial.waterCost) return false;
+  aerial.cooldownMs = aerial.maxCooldownMs;
+  aerial.ready = false;
+  return true;
+}
+// ============================================================
+// UPGRADE SYSTEM
+// ============================================================
+
+const UPGRADE_DEFS = [
+  {
+    id: 'heli_capacity',
+    name: 'Heli Water Tank',
+    desc: 'Reduces helicopter water cost by 15 per drop.',
+    category: 'helicopter',
+    maxLevel: 3,
+    costs: [600, 1000, 1600],
+    apply: function (player) {
+      // Applied in game.js when computing water costs
+    },
+  },
+  {
+    id: 'heli_cooldown',
+    name: 'Heli Response',
+    desc: 'Reduces helicopter cooldown by 3 seconds per level.',
+    category: 'helicopter',
+    maxLevel: 2,
+    costs: [700, 1200],
+  },
+  {
+    id: 'plane_area',
+    name: 'Bomber Load',
+    desc: 'Increases plane drop line by 2 tiles per level.',
+    category: 'plane',
+    maxLevel: 2,
+    costs: [900, 1500],
+  },
+  {
+    id: 'ff_armor',
+    name: 'FF Protective Gear',
+    desc: 'Reduces firefighter risk damage by 8 per level.',
+    category: 'firefighter',
+    maxLevel: 3,
+    costs: [500, 900, 1400],
+  },
+  {
+    id: 'ff_speed',
+    name: 'FF Mobility',
+    desc: 'Increases firefighter movement speed by 25% per level.',
+    category: 'firefighter',
+    maxLevel: 2,
+    costs: [400, 800],
+  },
+  {
+    id: 'ff_suppression',
+    name: 'FF Equipment',
+    desc: 'Increases firefighter suppression rate by 30% per level.',
+    category: 'firefighter',
+    maxLevel: 2,
+    costs: [500, 950],
+  },
+];
+
+function getUpgradeDefs() { return UPGRADE_DEFS; }
+
+function getUpgradeLevel(player, id) {
+  return (player.upgrades && player.upgrades[id]) || 0;
+}
+
+function canUpgrade(player, id) {
+  const def = UPGRADE_DEFS.find(u => u.id === id);
+  if (!def) return false;
+  const level = getUpgradeLevel(player, id);
+  if (level >= def.maxLevel) return false;
+  return player.budget >= def.costs[level];
+}
+
+function purchaseUpgrade(player, id) {
+  if (!canUpgrade(player, id)) return false;
+  const def = UPGRADE_DEFS.find(u => u.id === id);
+  const level = getUpgradeLevel(player, id);
+  player.budget -= def.costs[level];
+  if (!player.upgrades) player.upgrades = {};
+  player.upgrades[id] = level + 1;
+  return true;
+}
+
+// Compute effective values based on upgrades
+function getHeliWaterCost(player) {
+  const lvl = getUpgradeLevel(player, 'heli_capacity');
+  return Math.max(20, HELI_WATER_COST - lvl * 15);
+}
+
+function getHeliCooldown(player) {
+  const lvl = getUpgradeLevel(player, 'heli_cooldown');
+  return HELI_COOLDOWN_MS - lvl * 3000;
+}
+
+function getPlaneLine(player) {
+  const lvl = getUpgradeLevel(player, 'plane_area');
+  return PLANE_LINE + lvl * 2;
+}
+
+function getFFRiskDamage(player) {
+  const lvl = getUpgradeLevel(player, 'ff_armor');
+  return Math.max(5, RISK_DMG - lvl * 8);
+}
+
+function getFFMoveTicks(player) {
+  const lvl = getUpgradeLevel(player, 'ff_speed');
+  return Math.round(FF_MOVE_TICKS / (1 + lvl * 0.25));
+}
+
+function getFFSuppRate(player) {
+  const lvl = getUpgradeLevel(player, 'ff_suppression');
+  return FF_SUPP_RATE * (1 + lvl * 0.30);
+}
+// ============================================================
+// RENDERER
+// ============================================================
+
+let canvas, ctx, windCvs, windCtx;
+
+function initRenderer() {
+  canvas   = document.getElementById('game-canvas');
+  ctx      = canvas.getContext('2d');
+  windCvs  = document.getElementById('wind-canvas');
+  windCtx  = windCvs.getContext('2d');
+  canvas.width  = GRID * TILE_PX;
+  canvas.height = GRID * TILE_PX;
+}
+
+let _renderTick = 0; // for flicker animation
+
+// -----------------------------------------------------------
+// Main render call
+// -----------------------------------------------------------
+function render(G) {
+  _renderTick++;
+  if (!G) return;
+
+  const { map, wind, firefighters, aerials, selectedFF, actionMode, hoverX, hoverY } = G;
+  const dangerZones = getDangerZones(map, wind);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 1. Draw tiles
+  for (let y = 0; y < GRID; y++) {
+    for (let x = 0; x < GRID; x++) {
+      drawTile(x, y, map[y][x], dangerZones.has(y * GRID + x));
+    }
+  }
+
+  // 2. Draw fire overlays
+  for (let y = 0; y < GRID; y++) {
+    for (let x = 0; x < GRID; x++) {
+      const fi = map[y][x].fireIntensity;
+      if (fi > 0) drawFire(x, y, fi);
+    }
+  }
+
+  // 3. Hover preview
+  if (hoverX >= 0 && hoverY >= 0 && hoverX < GRID && hoverY < GRID) {
+    drawHover(hoverX, hoverY, actionMode, G);
+  }
+
+  // 4. Units
+  for (const ff of firefighters) drawFF(ff, ff.id === (selectedFF && selectedFF.id));
+
+  // 5. Grid lines (subtle)
+  drawGridLines();
+
+  // 6. Danger zone markers (on top of everything)
+  for (const ff of firefighters) {
+    if (ff.inDanger) drawDangerMarker(ff.x, ff.y);
+  }
+
+  // Update HUD panels
+  renderWindArrow(wind);
+  renderHUD(G);
+  renderSidebar(G, dangerZones);
+}
+
+// -----------------------------------------------------------
+// Tile rendering
+// -----------------------------------------------------------
+function drawTile(x, y, tile, isDanger) {
+  const px = x * TILE_PX, py = y * TILE_PX;
+
+  if (tile.burned) {
+    ctx.fillStyle = '#1a0d00';
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+    // Ash speckle
+    ctx.fillStyle = '#2a1a08';
+    if ((x + y) % 3 === 0) ctx.fillRect(px + 6, py + 6, 3, 3);
+    return;
+  }
+
+  ctx.fillStyle = T_COLOR[tile.type];
+  ctx.fillRect(px, py, TILE_PX, TILE_PX);
+
+  // Firebreak pattern
+  if (tile.firebreak) {
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    for (let i = 0; i < TILE_PX; i += 4) {
+      ctx.fillRect(px + i, py, 2, TILE_PX);
+    }
+  }
+
+  // Danger zone overlay
+  if (isDanger && tile.fireIntensity === 0) {
+    const alpha = 0.18 + 0.12 * Math.sin(_renderTick * 0.15);
+    ctx.fillStyle = `rgba(255, 50, 0, ${alpha})`;
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+  }
+}
+
+function drawFire(x, y, intensity) {
+  const px = x * TILE_PX, py = y * TILE_PX;
+  const flicker = 0.85 + 0.15 * Math.sin(_renderTick * 0.22 + x * 0.7 + y * 0.5);
+
+  const alphaMap = { 1: 0.45, 2: 0.60, 3: 0.72, 4: 0.85, 5: 0.95 };
+  const alpha = (alphaMap[intensity] || 0.5) * flicker;
+
+  // Base orange glow
+  const grad = ctx.createRadialGradient(
+    px + TILE_PX / 2, py + TILE_PX / 2, 0,
+    px + TILE_PX / 2, py + TILE_PX / 2, TILE_PX * 0.7
+  );
+  grad.addColorStop(0, `rgba(255, 200, 50, ${alpha})`);
+  grad.addColorStop(0.5, `rgba(255, 80, 10, ${alpha})`);
+  grad.addColorStop(1, `rgba(180, 10, 0, ${alpha * 0.6})`);
+  ctx.fillStyle = grad;
+  ctx.fillRect(px, py, TILE_PX, TILE_PX);
+
+  // Flame tip flicker at high intensity
+  if (intensity >= 3) {
+    const fx = px + 4 + ((_renderTick + x) % 5) * 2;
+    ctx.fillStyle = `rgba(255, 255, 100, ${0.6 * flicker})`;
+    ctx.fillRect(fx, py + 1, 3, 4);
+  }
+}
+
+function drawDangerMarker(x, y) {
+  const px = x * TILE_PX, py = y * TILE_PX;
+  const flash = Math.sin(_renderTick * 0.3) > 0;
+  if (flash) {
+    ctx.strokeStyle = '#ff0000';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px + 1, py + 1, TILE_PX - 2, TILE_PX - 2);
+  }
+}
+
+function drawGridLines() {
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x <= GRID; x++) {
+    ctx.beginPath(); ctx.moveTo(x * TILE_PX, 0); ctx.lineTo(x * TILE_PX, canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y <= GRID; y++) {
+    ctx.beginPath(); ctx.moveTo(0, y * TILE_PX); ctx.lineTo(canvas.width, y * TILE_PX); ctx.stroke();
+  }
+}
+
+// -----------------------------------------------------------
+// Firefighter rendering
+// -----------------------------------------------------------
+function drawFF(ff, selected) {
+  const px = ff.x * TILE_PX + TILE_PX / 2;
+  const py = ff.y * TILE_PX + TILE_PX / 2;
+  const r = 5;
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.beginPath();
+  ctx.ellipse(px + 1, py + 2, r, r * 0.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Body
+  const hpFrac = ff.hp / ff.maxHp;
+  const bodyColor = ff.inDanger
+    ? (Math.sin(_renderTick * 0.4) > 0 ? '#ff4040' : '#ffff00')
+    : (hpFrac > 0.6 ? '#fbbf24' : hpFrac > 0.3 ? '#f97316' : '#ef4444');
+
+  ctx.fillStyle = bodyColor;
+  ctx.beginPath();
+  ctx.arc(px, py, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Helmet
+  ctx.fillStyle = '#1e40af';
+  ctx.beginPath();
+  ctx.ellipse(px, py - 3, 4, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Selection ring
+  if (selected) {
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(px, py, r + 3, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Movement target line
+  if (ff.moving) {
+    const tx = ff.targetX * TILE_PX + TILE_PX / 2;
+    const ty = ff.targetY * TILE_PX + TILE_PX / 2;
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tx, ty); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillRect(tx - 2, ty - 2, 4, 4);
+  }
+
+  // Firebreak progress arc
+  if (ff.makingBreak) {
+    const prog = 1 - ff.breakProgress / FF_BREAK_TICKS;
+    ctx.strokeStyle = '#86efac';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(px, py, r + 4, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+// -----------------------------------------------------------
+// Hover preview
+// -----------------------------------------------------------
+function drawHover(hx, hy, mode, G) {
+  const px = hx * TILE_PX, py = hy * TILE_PX;
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(px + 1, py + 1, TILE_PX - 2, TILE_PX - 2);
+
+  if (mode === 'heli_drop') {
+    // Show splash radius
+    ctx.fillStyle = 'rgba(100, 200, 255, 0.20)';
+    for (const [dx, dy] of NEIGHBORS) {
+      const nx = hx + dx, ny = hy + dy;
+      if (nx >= 0 && nx < GRID && ny >= 0 && ny < GRID) {
+        ctx.fillRect(nx * TILE_PX, ny * TILE_PX, TILE_PX, TILE_PX);
+      }
+    }
+    ctx.fillStyle = 'rgba(100, 200, 255, 0.45)';
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+  } else if (mode === 'plane_run') {
+    // Show the drop line (perpendicular to wind)
+    const wv = W_VEC[G.wind.dir];
+    const perpDx = -wv[1], perpDy = wv[0];
+    const planeLine = getPlaneLine(G.player);
+    const half = Math.floor(planeLine / 2);
+    ctx.fillStyle = 'rgba(100, 200, 255, 0.35)';
+    for (let i = -half; i <= half; i++) {
+      const tx = Math.round(hx + perpDx * i);
+      const ty = Math.round(hy + perpDy * i);
+      if (tx >= 0 && tx < GRID && ty >= 0 && ty < GRID) {
+        ctx.fillRect(tx * TILE_PX, ty * TILE_PX, TILE_PX, TILE_PX);
+        // Also show direction of run
+        const ax = Math.round(tx + wv[0]), ay = Math.round(ty + wv[1]);
+        if (ax >= 0 && ax < GRID && ay >= 0 && ay < GRID) {
+          ctx.fillStyle = 'rgba(100, 200, 255, 0.18)';
+          ctx.fillRect(ax * TILE_PX, ay * TILE_PX, TILE_PX, TILE_PX);
+          ctx.fillStyle = 'rgba(100, 200, 255, 0.35)';
+        }
+      }
+    }
+  } else if (mode === 'firebreak') {
+    ctx.fillStyle = 'rgba(139, 115, 85, 0.5)';
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+  } else if (mode === 'deploy_ff') {
+    ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+  }
+}
+
+// -----------------------------------------------------------
+// Wind arrow canvas
+// -----------------------------------------------------------
+function renderWindArrow(wind) {
+  const W = windCvs.width, H = windCvs.height;
+  windCtx.clearRect(0, 0, W, H);
+
+  // Background
+  windCtx.fillStyle = '#1f2937';
+  windCtx.beginPath();
+  windCtx.arc(W / 2, H / 2, W / 2 - 2, 0, Math.PI * 2);
+  windCtx.fill();
+
+  // Cardinal labels
+  windCtx.font = 'bold 8px Courier New';
+  windCtx.fillStyle = '#4b5563';
+  windCtx.textAlign = 'center';
+  windCtx.textBaseline = 'middle';
+  windCtx.fillText('N', W / 2, 6);
+  windCtx.fillText('S', W / 2, H - 6);
+  windCtx.fillText('W', 6, H / 2);
+  windCtx.fillText('E', W - 6, H / 2);
+
+  // Wind direction arrow
+  const vec = W_VEC[wind.dir];
+  const cx = W / 2, cy = H / 2;
+  const len = 16;
+  const angle = Math.atan2(vec[1], vec[0]);
+
+  const strColors = { 1: '#86efac', 2: '#fbbf24', 3: '#f87171' };
+  windCtx.strokeStyle = strColors[wind.str];
+  windCtx.fillStyle   = strColors[wind.str];
+  windCtx.lineWidth = 2.5;
+
+  // Shaft
+  windCtx.beginPath();
+  windCtx.moveTo(cx - vec[0] * len * 0.5, cy - vec[1] * len * 0.5);
+  windCtx.lineTo(cx + vec[0] * len * 0.6, cy + vec[1] * len * 0.6);
+  windCtx.stroke();
+
+  // Arrowhead
+  const ax = cx + vec[0] * len;
+  const ay = cy + vec[1] * len;
+  windCtx.beginPath();
+  windCtx.moveTo(ax, ay);
+  windCtx.lineTo(ax - Math.cos(angle - 0.5) * 8, ay - Math.sin(angle - 0.5) * 8);
+  windCtx.lineTo(ax - Math.cos(angle + 0.5) * 8, ay - Math.sin(angle + 0.5) * 8);
+  windCtx.closePath();
+  windCtx.fill();
+
+  // Changing indicator
+  if (wind.changeFlash > 0) {
+    windCtx.strokeStyle = `rgba(255,255,100,${wind.changeFlash / 120})`;
+    windCtx.lineWidth = 3;
+    windCtx.beginPath();
+    windCtx.arc(W / 2, H / 2, W / 2 - 2, 0, Math.PI * 2);
+    windCtx.stroke();
+  }
+}
+
+// -----------------------------------------------------------
+// HUD top-bar text updates
+// -----------------------------------------------------------
+function renderHUD(G) {
+  const { contract, wind, water, budget, elapsed, firefighters, map } = G;
+
+  // Timer
+  const sec = Math.floor(elapsed / 1000);
+  const remaining = Math.max(0, contract.timeLimitSec - sec);
+  const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+  const ss = String(remaining % 60).padStart(2, '0');
+  document.getElementById('disp-timer').textContent = `${mm}:${ss}`;
+
+  // Wind
+  document.getElementById('disp-wind-dir').textContent = W_NAME[wind.dir];
+  const strEl = document.getElementById('disp-wind-str');
+  strEl.textContent = W_STR_NAME[wind.str];
+  strEl.className = wind.str === 1 ? 'str-light' : wind.str === 2 ? 'str-moderate' : 'str-strong';
+
+  // Wind change bar
+  const pct = windChangePct(wind) * 100;
+  document.getElementById('wind-change-fill').style.width = `${100 - pct}%`;
+
+  // Resources
+  document.getElementById('disp-water').textContent = Math.floor(water);
+  document.getElementById('disp-money').textContent = budget;
+
+  // Danger warning
+  const inDanger = firefighters.some(f => f.inDanger);
+  document.getElementById('danger-warn').classList.toggle('hidden', !inDanger);
+}
+
+// -----------------------------------------------------------
+// Sidebar updates (throttled via G.sidebarDirty)
+// -----------------------------------------------------------
+function renderSidebar(G, dangerZones) {
+  renderFFList(G, dangerZones);
+  renderAerialList(G);
+  renderFireStatus(G);
+  renderSelectedInfo(G);
+}
+
+function renderFFList(G, dangerZones) {
+  const el = document.getElementById('ff-list');
+  let html = '';
+  for (const ff of G.firefighters) {
+    const hpPct = (ff.hp / ff.maxHp) * 100;
+    const hpClass = hpPct > 60 ? '' : hpPct > 30 ? 'mid' : 'low';
+    const danger  = ff.inDanger;
+    const sel     = G.selectedFF && G.selectedFF.id === ff.id;
+    html += `<div class="ff-item${danger ? ' danger' : ''}${sel ? ' selected' : ''}"
+                  data-ffid="${ff.id}" onclick="gameSelectFF(${ff.id})">
+      <div class="ff-name">FF #${ff.id + 1}</div>
+      <div class="ff-hp">
+        <div class="hp-bar"><div class="hp-fill ${hpClass}" style="width:${hpPct}%"></div></div>
+        ${ff.hp}/${ff.maxHp} HP
+      </div>
+      <div class="ff-status">${ff.status}${danger ? ' ⚠' : ''}</div>
+    </div>`;
+  }
+  if (!G.firefighters.length) html = '<div style="color:#6b7280;font-size:0.78em">None deployed</div>';
+  el.innerHTML = html;
+}
+
+function renderAerialList(G) {
+  const el = document.getElementById('aerial-list');
+  let html = '';
+  for (const a of G.aerials) {
+    if (!a.count) continue;
+    const cdSec  = Math.ceil(a.cooldownMs / 1000);
+    const pct    = a.ready ? 100 : (1 - a.cooldownMs / a.maxCooldownMs) * 100;
+    const rdyStr = a.ready ? 'READY' : `${cdSec}s`;
+    const rdyCls = a.ready ? 'ready' : '';
+    html += `<div class="aerial-item">
+      <div class="aerial-name">${a.label} x${a.count}</div>
+      <div class="cd-bar"><div class="cd-fill ${rdyCls}" style="width:${pct}%"></div></div>
+      <div class="aerial-cd ${rdyCls}">${rdyStr} | ${a.waterCost} water</div>
+    </div>`;
+  }
+  if (!html) html = '<div style="color:#6b7280;font-size:0.78em">None available</div>';
+  el.innerHTML = html;
+}
+
+function renderFireStatus(G) {
+  const flammable = countFlammable(G.map);
+  const burned    = countBurned(G.map);
+  const active    = countFire(G.map);
+  const burnPct   = flammable ? Math.round(burned / flammable * 100) : 0;
+  const losePct   = Math.round(BURN_LOSE_PCT * 100);
+
+  document.getElementById('fire-status-info').innerHTML =
+    `<div>Active fires: <b>${active}</b></div>
+     <div>Burned: <b>${burnPct}%</b> (lose at ${losePct}%)</div>
+     <div class="burn-bar"><div class="burn-fill" style="width:${burnPct}%"></div></div>`;
+}
+
+function renderSelectedInfo(G) {
+  const el = document.getElementById('selected-info');
+  if (G.selectedFF) {
+    const ff = G.selectedFF;
+    el.innerHTML = `<b>Firefighter #${ff.id + 1}</b><br>
+      HP: ${ff.hp}/${ff.maxHp}<br>
+      Pos: (${ff.x}, ${ff.y})<br>
+      Status: ${ff.status}`;
+  } else if (G.actionMode) {
+    const labels = {
+      heli_drop: 'Click map to drop water (helicopter)',
+      plane_run: 'Click map to set bomb run line',
+      deploy_ff: 'Click tile to deploy firefighter',
+      move: 'Click firefighter, then destination',
+      firebreak: 'Select firefighter, click target tile',
+    };
+    el.textContent = labels[G.actionMode] || G.actionMode;
+  } else {
+    el.textContent = 'Nothing selected';
+  }
+}
+
+// -----------------------------------------------------------
+// Contract screen rendering
+// -----------------------------------------------------------
+function renderContractScreen(player) {
+  document.getElementById('disp-budget').textContent = player.budget;
+  document.getElementById('disp-done').textContent = Object.keys(player.done).length;
+
+  const done = Object.keys(player.done).length;
+  let html = '';
+  for (const c of CONTRACTS) {
+    const locked    = done < c.requiredDone;
+    const completed = player.done[c.id];
+    const diffColor = c.difficulty === 'EASY' ? '#4ade80' : c.difficulty === 'MEDIUM' ? '#fbbf24' : '#f87171';
+    html += `<div class="contract-card${locked ? ' locked' : ''}${completed ? ' completed' : ''}"
+               onclick="gameStartContract(${c.id})">
+      <h3>${c.name}</h3>
+      <div class="c-desc">${c.description}</div>
+      <div class="c-row"><span class="c-label">Difficulty</span><span class="c-val" style="color:${diffColor}">${c.difficulty}</span></div>
+      <div class="c-row"><span class="c-label">Time Limit</span><span class="c-val">${c.timeLimitSec / 60} min</span></div>
+      <div class="c-row"><span class="c-label">Firefighters</span><span class="c-val">${c.startFF}</span></div>
+      <div class="c-row"><span class="c-label">Helicopter</span><span class="c-val">${c.startHeli}</span></div>
+      <div class="c-row"><span class="c-label">Plane</span><span class="c-val">${c.startPlane}</span></div>
+      <div class="c-reward">Base reward: $${c.baseReward}</div>
+      ${completed ? `<div class="c-completed">Completed: ${completed}</div>` : ''}
+      ${locked ? '<div style="color:#6b7280;font-size:0.8em;margin-top:4px">Complete previous missions first</div>' : ''}
+    </div>`;
+  }
+  document.getElementById('contract-cards').innerHTML = html;
+
+  // Upgrades
+  let uhtml = '';
+  for (const def of UPGRADE_DEFS) {
+    const level = getUpgradeLevel(player, def.id);
+    const maxed = level >= def.maxLevel;
+    const cost  = maxed ? '—' : `$${def.costs[level]}`;
+    const able  = canUpgrade(player, def.id);
+    uhtml += `<div class="upgrade-card">
+      <h4>${def.name}</h4>
+      <div class="up-desc">${def.desc}</div>
+      <div class="up-level">Level: ${level}/${def.maxLevel}</div>
+      <button onclick="gameBuyUpgrade('${def.id}')" ${able ? '' : 'disabled'}>
+        ${maxed ? 'MAXED' : `Upgrade (${cost})`}
+      </button>
+    </div>`;
+  }
+  document.getElementById('upgrade-cards').innerHTML = uhtml;
+}
+
+// -----------------------------------------------------------
+// Result screen
+// -----------------------------------------------------------
+function renderResultScreen(result) {
+  const ratingColors = { S: 'rating-S', A: 'rating-A', B: 'rating-B', C: 'rating-C', FAIL: 'rating-FAIL' };
+  document.getElementById('result-rating-badge').textContent = result.rating;
+  document.getElementById('result-rating-badge').className   = ratingColors[result.rating] || '';
+  document.getElementById('result-title').textContent = result.won ? 'Mission Complete' : 'Mission Failed';
+
+  let statsHtml = '';
+  for (const row of result.statsRows) {
+    statsHtml += `<div class="rs-row">
+      <span class="rs-label">${row.label}</span>
+      <span class="rs-val ${row.cls || ''}">${row.val}</span>
+    </div>`;
+  }
+  document.getElementById('result-stats-list').innerHTML = statsHtml;
+  document.getElementById('result-payout').textContent = `Earned: $${result.earned}`;
+}
+// ============================================================
+// MAIN GAME LOGIC & LOOP
+// ============================================================
+
+// Player persistent state
+const PLAYER = {
+  budget: 5000,
+  done: {},      // contractId -> rating string
+  upgrades: {},
+};
+
+// Active game state (null when not playing)
+let G = null;
+
+// Screens (lazy load to wait for DOM)
+function getScreens() {
+  return {
+    contract: document.getElementById('screen-contract'),
+    game:     document.getElementById('screen-game'),
+    result:   document.getElementById('screen-result'),
+  };
+}
+
+function showScreen(name) {
+  const screens = getScreens();
+  for (const [k, el] of Object.entries(screens)) {
+    if (el) el.classList.toggle('active', k === name);
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  try {
+    initRenderer(); // Set up canvas elements
+  } catch (e) {
+    console.error('Failed to initialize renderer:', e);
+    return;
+  }
+
+  // UI buttons
+  document.getElementById('btn-pause').addEventListener('click', gamePause);
+  document.getElementById('btn-quit').addEventListener('click', () => { stopLoop(); showScreen('contract'); });
+  document.getElementById('btn-resume').addEventListener('click', gameResume);
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    document.getElementById('overlay-pause').classList.add('hidden');
+    if (G) gameStartContract(G.contract.id);
+  });
+  document.getElementById('btn-menu').addEventListener('click', () => {
+    document.getElementById('overlay-pause').classList.add('hidden');
+    stopLoop();
+    showScreen('contract');
+    renderContractScreen(PLAYER);
+  });
+  document.getElementById('btn-continue').addEventListener('click', () => {
+    showScreen('contract');
+    renderContractScreen(PLAYER);
+  });
+
+  // Canvas input
+  canvas.addEventListener('mousemove', onCanvasMouseMove);
+  canvas.addEventListener('click', onCanvasClick);
+  canvas.addEventListener('mouseleave', () => { if (G) { G.hoverX = -1; G.hoverY = -1; } });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && G) { e.preventDefault(); gamePause(); }
+    if (e.code === 'Escape' && G) { G.actionMode = null; G.selectedFF = null; }
+  });
+
+  // Initialize UI and start loop
+  showScreen('contract');
+  renderContractScreen(PLAYER);
+  requestAnimationFrame(loop);
+});
+
+// ============================================================
+// GAME LOOP
+// ============================================================
+let lastTs    = 0;
+let running   = false;
+let accMs     = 0;
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const dt = Math.min(ts - lastTs, 100); // cap at 100ms to avoid spiral
+  lastTs = ts;
+
+  if (running && G && G.phase === 'playing') {
+    accMs += dt;
+    while (accMs >= TICK_MS) {
+      tick();
+      accMs -= TICK_MS;
+    }
+  }
+
+  if (G) render(G);
+}
+
+function stopLoop()  { running = false; }
+function startLoop() { running = true; accMs = 0; }
+
+// ============================================================
+// START CONTRACT
+// ============================================================
+window.gameStartContract = function (id) {
+  const contract = getContract(id);
+  if (!contract) return;
+  const done = Object.keys(PLAYER.done).length;
+  if (done < contract.requiredDone) return;
+
+  // Build game state
+  const firefighters = [];
+  for (let i = 0; i < contract.startFF; i++) {
+    // Spawn at bottom-center staging area
+    const sx = Math.floor(GRID / 2) - Math.floor(contract.startFF / 2) + i;
+    firefighters.push(ffCreate(sx, GRID - 2));
+  }
+
+  const aerials = [];
+  if (contract.startHeli > 0) {
+    const a = aerialCreate('helicopter', contract.startHeli);
+    a.waterCost = getHeliWaterCost(PLAYER);
+    a.maxCooldownMs = getHeliCooldown(PLAYER);
+    aerials.push(a);
+  }
+  if (contract.startPlane > 0) {
+    aerials.push(aerialCreate('plane', contract.startPlane));
+  }
+
+  G = {
+    contract,
+    map:          mapGenerate(contract),
+    wind:         windCreate(contract.startWind.dir, contract.startWind.str),
+    firefighters,
+    aerials,
+    water:        contract.waterSupply,
+    budget:       contract.startBudget,
+    elapsed:      0,
+    tick:         0,
+    waterUsed:    0,
+    unitsLost:    0,
+    initFFCount:  contract.startFF,
+    // UI state
+    selectedFF:   null,
+    actionMode:   null, // 'move','heli_drop','plane_run','deploy_ff','firebreak'
+    hoverX:       -1,
+    hoverY:       -1,
+    player:       PLAYER,
+    phase:        'playing', // 'playing','won','lost'
+  };
+
+  document.getElementById('disp-mission-name').textContent = contract.name;
+  buildActionButtons();
+  showScreen('game');
+  startLoop();
+};
+
+// ============================================================
+// TICK (game logic update)
+// ============================================================
+function tick() {
+  if (!G || G.phase !== 'playing') return;
+
+  G.elapsed += TICK_MS;
+  G.tick++;
+
+  // Update wind
+  windUpdate(G.wind, TICK_MS);
+
+  // Update fire every FIRE_EVERY ticks
+  if (G.tick % FIRE_EVERY === 0) {
+    fireUpdate(G.map, G.wind);
+  }
+
+  // Update firefighters
+  const suppRate = getFFSuppRate(PLAYER);
+  const moveTicks = getFFMoveTicks(PLAYER);
+  const riskDmg  = getFFRiskDamage(PLAYER);
+
+  for (let i = G.firefighters.length - 1; i >= 0; i--) {
+    const ff = G.firefighters[i];
+
+    // Movement
+    ffUpdateMovement(ff);
+
+    // Firebreak construction
+    ffUpdateFirebreak(ff, G.map);
+
+    // Passive suppression on current tile
+    if (!ff.moving) {
+      const tile = tileAt(G.map, ff.x, ff.y);
+      if (tile && tile.fireIntensity > 0) {
+        tile.fireIntensity = Math.max(0, tile.fireIntensity - suppRate);
+        if (tile.fireIntensity === 0) tile.burnTime = 0;
+        ff.status = 'Suppressing';
+      } else if (!ff.makingBreak) {
+        ff.status = 'Idle';
+      }
+    }
+
+    // Risk check: updates ff.inDanger; damage applied here with upgrade values
+    ffCheckDanger(ff, G.map, G.wind, G.tick);
+    if (ff.inDanger && G.tick % RISK_EVERY === 0) {
+      if (Math.random() < RISK_CHANCE[G.wind.str]) {
+        ff.hp -= riskDmg;
+      }
+    }
+
+    // Death
+    if (ff.hp <= 0) {
+      G.unitsLost++;
+      G.firefighters.splice(i, 1);
+      if (G.selectedFF && G.selectedFF.id === ff.id) G.selectedFF = null;
+    }
+  }
+
+  // Update aerial cooldowns
+  for (const a of G.aerials) {
+    aerialUpdate(a, TICK_MS);
+  }
+
+  // Check win/lose
+  checkConditions();
+}
+
+// ============================================================
+// WIN/LOSE CONDITIONS
+// ============================================================
+function checkConditions() {
+  if (G.phase !== 'playing') return;
+
+  const flammable = countFlammable(G.map);
+  const burned    = countBurned(G.map);
+  const active    = countFire(G.map);
+  const sec       = Math.floor(G.elapsed / 1000);
+
+  // Lose: too much burned
+  if (flammable > 0 && burned / flammable >= BURN_LOSE_PCT) {
+    endGame(false, 'Too much land destroyed');
+    return;
+  }
+
+  // Lose: time limit
+  if (sec >= G.contract.timeLimitSec) {
+    endGame(active === 0, active === 0 ? '' : 'Time ran out');
+    return;
+  }
+
+  // Win: fire fully contained
+  if (active === 0 && sec > 5) {
+    endGame(true, '');
+  }
+}
+
+// ============================================================
+// END GAME
+// ============================================================
+function endGame(won, reason) {
+  G.phase = won ? 'won' : 'lost';
+  stopLoop();
+
+  const flammable = countFlammable(G.map);
+  const burned    = countBurned(G.map);
+  const savedPct  = flammable ? Math.round((flammable - burned) / flammable * 100) : 100;
+  const timeSec   = Math.floor(G.elapsed / 1000);
+  const waterEff  = G.contract.waterSupply > 0
+    ? Math.round((1 - G.waterUsed / G.contract.waterSupply) * 100) : 100;
+
+  // Payment calculation
+  let earned = 0;
+  let rating  = 'FAIL';
+  if (won) {
+    earned += G.contract.baseReward;
+    earned += savedPct >= 90 ? 1200 : savedPct >= 75 ? 600 : savedPct >= 50 ? 200 : 0;
+    earned -= G.unitsLost * 400;
+    earned += Math.max(0, waterEff) * 3;
+    const timeBonus = timeSec < G.contract.timeLimitSec * 0.60 ? 500 : 0;
+    earned += timeBonus;
+    earned  = Math.max(0, earned);
+
+    const ratio = earned / G.contract.baseReward;
+    rating = ratio >= 1.8 ? 'S' : ratio >= 1.3 ? 'A' : ratio >= 0.85 ? 'B' : 'C';
+  }
+
+  PLAYER.budget += earned;
+  if (won) PLAYER.done[G.contract.id] = rating;
+
+  const statsRows = [
+    { label: 'Land Saved',       val: `${savedPct}%`,      cls: savedPct >= 75 ? 'good' : 'bad' },
+    { label: 'Firefighters Lost',val: G.unitsLost,          cls: G.unitsLost === 0 ? 'good' : 'bad' },
+    { label: 'Water Efficiency', val: `${waterEff}%`,       cls: waterEff >= 50 ? 'good' : '' },
+    { label: 'Time Taken',       val: fmtTime(timeSec),     cls: '' },
+    { label: 'Base Reward',      val: `$${G.contract.baseReward}`, cls: '' },
+  ];
+  if (!won && reason) statsRows.push({ label: 'Reason', val: reason, cls: 'bad' });
+
+  renderResultScreen({ won, rating, earned, statsRows });
+  showScreen('result');
+}
+
+function fmtTime(sec) {
+  return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+}
+
+// ============================================================
+// PAUSE
+// ============================================================
+function gamePause() {
+  if (!G || G.phase !== 'playing') return;
+  running = false;
+  document.getElementById('overlay-pause').classList.remove('hidden');
+}
+function gameResume() {
+  document.getElementById('overlay-pause').classList.add('hidden');
+  if (G && G.phase === 'playing') startLoop();
+}
+
+// ============================================================
+// CANVAS INPUT
+// ============================================================
+function onCanvasMouseMove(e) {
+  if (!G) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width  / rect.width;
+  const scaleY = canvas.height / rect.height;
+  G.hoverX = Math.floor((e.clientX - rect.left) * scaleX / TILE_PX);
+  G.hoverY = Math.floor((e.clientY - rect.top)  * scaleY / TILE_PX);
+}
+
+function onCanvasClick(e) {
+  if (!G || G.phase !== 'playing') return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width  / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const tx = Math.floor((e.clientX - rect.left) * scaleX / TILE_PX);
+  const ty = Math.floor((e.clientY - rect.top)  * scaleY / TILE_PX);
+  if (tx < 0 || tx >= GRID || ty < 0 || ty >= GRID) return;
+
+  handleTileClick(tx, ty);
+}
+
+function handleTileClick(tx, ty) {
+  const mode = G.actionMode;
+
+  // --- MOVE mode: first click selects, second click is destination ---
+  if (mode === 'move') {
+    // Click on a firefighter to select it
+    const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
+    if (clickedFF) {
+      G.selectedFF = clickedFF;
+      return;
+    }
+    // If FF already selected, move to tile
+    if (G.selectedFF) {
+      ffMoveTo(G.selectedFF, tx, ty, getFFMoveTicks(PLAYER));
+      G.selectedFF = null;
+      G.actionMode = null;
+      buildActionButtons();
+      return;
+    }
+  }
+
+  // --- FIREBREAK mode ---
+  if (mode === 'firebreak') {
+    if (!G.selectedFF) {
+      const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
+      if (clickedFF) { G.selectedFF = clickedFF; return; }
+    } else {
+      ffStartFirebreak(G.selectedFF, G.map, tx, ty);
+      G.selectedFF = null;
+      G.actionMode = null;
+      buildActionButtons();
+      return;
+    }
+  }
+
+  // --- DEPLOY FF ---
+  if (mode === 'deploy_ff') {
+    const tile = tileAt(G.map, tx, ty);
+    if (!tile || tile.type === T.WATER || tile.type === T.ROCK) return;
+    if (G.budget < COST_FF) { showMsg('Not enough budget!'); return; }
+    G.firefighters.push(ffCreate(tx, ty));
+    G.budget -= COST_FF;
+    G.actionMode = null;
+    buildActionButtons();
+    return;
+  }
+
+  // --- HELI DROP ---
+  if (mode === 'heli_drop') {
+    const heli = G.aerials.find(a => a.type === 'helicopter');
+    if (!heli) return;
+    if (!heli.ready) { showMsg('Helicopter on cooldown!'); return; }
+    if (G.water < heli.waterCost) { showMsg('Not enough water!'); return; }
+    if (aerialDeploy(heli, G.water)) {
+      G.water -= heli.waterCost;
+      G.waterUsed += heli.waterCost;
+      fireHeliDrop(G.map, tx, ty, HELI_INTENSITY_REDUCE);
+      G.actionMode = null;
+      buildActionButtons();
+    }
+    return;
+  }
+
+  // --- PLANE RUN ---
+  if (mode === 'plane_run') {
+    const plane = G.aerials.find(a => a.type === 'plane');
+    if (!plane) return;
+    if (!plane.ready) { showMsg('Plane on cooldown!'); return; }
+    if (G.water < plane.waterCost) { showMsg('Not enough water!'); return; }
+    if (aerialDeploy(plane, G.water)) {
+      G.water -= plane.waterCost;
+      G.waterUsed += plane.waterCost;
+      firePlaneRun(G.map, tx, ty, G.wind, getPlaneLine(PLAYER));
+      G.actionMode = null;
+      buildActionButtons();
+    }
+    return;
+  }
+
+  // --- Default: click on firefighter to select / deselect ---
+  const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
+  if (clickedFF) {
+    G.selectedFF = G.selectedFF && G.selectedFF.id === clickedFF.id ? null : clickedFF;
+  } else {
+    // If a FF is selected with no mode, move it
+    if (G.selectedFF) {
+      ffMoveTo(G.selectedFF, tx, ty, getFFMoveTicks(PLAYER));
+      G.selectedFF = null;
+    }
+  }
+}
+
+// ============================================================
+// ACTION BUTTON BUILDING
+// ============================================================
+function buildActionButtons() {
+  const el = document.getElementById('action-btns');
+  const heli  = G && G.aerials.find(a => a.type === 'helicopter');
+  const plane = G && G.aerials.find(a => a.type === 'plane');
+
+  const actions = [
+    {
+      id: 'move',
+      label: 'Move Firefighter',
+      hint: 'Select FF → click destination',
+      cost: 'Free',
+      enabled: G && G.firefighters.length > 0,
+    },
+    {
+      id: 'deploy_ff',
+      label: 'Deploy Firefighter',
+      hint: 'Click tile to deploy',
+      cost: `$${COST_FF}`,
+      enabled: G && G.budget >= COST_FF,
+    },
+    {
+      id: 'firebreak',
+      label: 'Create Firebreak',
+      hint: 'Select FF → click target tile',
+      cost: 'Time',
+      enabled: G && G.firefighters.length > 0,
+    },
+    {
+      id: 'heli_drop',
+      label: 'Helicopter Drop',
+      hint: 'Click target tile',
+      cost: heli ? `${heli.waterCost} water` : 'N/A',
+      enabled: heli && heli.ready && G.water >= heli.waterCost,
+    },
+    {
+      id: 'plane_run',
+      label: 'Plane Water Run',
+      hint: 'Click center of run line',
+      cost: plane ? `${plane.waterCost} water` : 'N/A',
+      enabled: plane && plane.ready && G.water >= plane.waterCost,
+    },
+  ];
+
+  let html = '';
+  for (const a of actions) {
+    if (a.id === 'heli_drop' && (!heli || !heli.count)) continue;
+    if (a.id === 'plane_run' && (!plane || !plane.count)) continue;
+    const active  = G && G.actionMode === a.id;
+    const disabled = !a.enabled;
+    html += `<button class="act-btn${active ? ' active' : ''}${disabled ? ' disabled' : ''}"
+                     onclick="gameSetAction('${a.id}')">
+      <span>${a.label}</span>
+      <span class="act-cost">${a.cost}</span>
+      <span class="act-hint">${a.hint}</span>
+    </button>`;
+  }
+  el.innerHTML = html;
+}
+
+window.gameSetAction = function (id) {
+  if (!G || G.phase !== 'playing') return;
+  G.actionMode = G.actionMode === id ? null : id;
+  G.selectedFF = null;
+  buildActionButtons();
+};
+
+window.gameSelectFF = function (id) {
+  if (!G) return;
+  const ff = G.firefighters.find(f => f.id === id);
+  G.selectedFF = ff || null;
+};
+
+window.gameBuyUpgrade = function (id) {
+  if (purchaseUpgrade(PLAYER, id)) {
+    renderContractScreen(PLAYER);
+  }
+};
+
+// ============================================================
+// SMALL NOTIFICATION
+// ============================================================
+function showMsg(msg) {
+  const el = document.getElementById('danger-warn');
+  const prev = el.textContent;
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  setTimeout(() => {
+    el.textContent = prev;
+    if (!G || !G.firefighters.some(f => f.inDanger)) el.classList.add('hidden');
+  }, 1800);
+}
+</script>
 </body>
 </html>
