@@ -12,27 +12,40 @@ const PLAYER = {
 // Active game state (null when not playing)
 let G = null;
 
-// Screens
-const screens = {
-  contract: document.getElementById('screen-contract'),
-  game:     document.getElementById('screen-game'),
-  result:   document.getElementById('screen-result'),
-};
+// Screens (lazy load to wait for DOM)
+function getScreens() {
+  return {
+    contract: document.getElementById('screen-contract'),
+    game:     document.getElementById('screen-game'),
+    result:   document.getElementById('screen-result'),
+  };
+}
 
 function showScreen(name) {
-  for (const [k, el] of Object.entries(screens)) el.classList.toggle('active', k === name);
+  const screens = getScreens();
+  for (const [k, el] of Object.entries(screens)) {
+    if (el) el.classList.toggle('active', k === name);
+  }
 }
 
 // ============================================================
 // INIT
 // ============================================================
 window.addEventListener('load', () => {
+  try {
+    initRenderer(); // Set up canvas elements
+  } catch (e) {
+    console.error('Failed to initialize renderer:', e);
+    return;
+  }
+
+  // UI buttons
   document.getElementById('btn-pause').addEventListener('click', gamePause);
   document.getElementById('btn-quit').addEventListener('click', () => { stopLoop(); showScreen('contract'); });
   document.getElementById('btn-resume').addEventListener('click', gameResume);
   document.getElementById('btn-restart').addEventListener('click', () => {
     document.getElementById('overlay-pause').classList.add('hidden');
-    gameStartContract(G.contract.id);
+    if (G) gameStartContract(G.contract.id);
   });
   document.getElementById('btn-menu').addEventListener('click', () => {
     document.getElementById('overlay-pause').classList.add('hidden');
@@ -45,15 +58,18 @@ window.addEventListener('load', () => {
     renderContractScreen(PLAYER);
   });
 
+  // Canvas input
   canvas.addEventListener('mousemove', onCanvasMouseMove);
   canvas.addEventListener('click', onCanvasClick);
   canvas.addEventListener('mouseleave', () => { if (G) { G.hoverX = -1; G.hoverY = -1; } });
 
+  // Keyboard
   document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') { e.preventDefault(); G ? gamePause() : null; }
-    if (e.code === 'Escape') { if (G) { G.actionMode = null; G.selectedFF = null; } }
+    if (e.code === 'Space' && G) { e.preventDefault(); gamePause(); }
+    if (e.code === 'Escape' && G) { G.actionMode = null; G.selectedFF = null; }
   });
 
+  // Initialize UI and start loop
   showScreen('contract');
   renderContractScreen(PLAYER);
   requestAnimationFrame(loop);

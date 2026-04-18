@@ -2,13 +2,16 @@
 // RENDERER
 // ============================================================
 
-const canvas   = document.getElementById('game-canvas');
-const ctx      = canvas.getContext('2d');
-const windCvs  = document.getElementById('wind-canvas');
-const windCtx  = windCvs.getContext('2d');
+let canvas, ctx, windCvs, windCtx;
 
-canvas.width  = GRID * TILE_PX;
-canvas.height = GRID * TILE_PX;
+function initRenderer() {
+  canvas   = document.getElementById('game-canvas');
+  ctx      = canvas.getContext('2d');
+  windCvs  = document.getElementById('wind-canvas');
+  windCtx  = windCvs.getContext('2d');
+  canvas.width  = GRID * TILE_PX;
+  canvas.height = GRID * TILE_PX;
+}
 
 let _renderTick = 0; // for flicker animation
 
