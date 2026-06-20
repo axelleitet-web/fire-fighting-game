@@ -387,160 +387,260 @@ body {
   font-size: 0.95em;
 }
 #pause-box button:hover { background: #f97316; border-color: #f97316; }
+
+/* ===== v2 ADDITIONS ===== */
+:root {
+  --bg0:#0b1017;--bg1:#111827;--bg2:#1f2937;--bg3:#374151;
+  --border:#2d3748;--text:#e2e8f0;--muted:#6b7280;
+  --orange:#f97316;--red:#ef4444;--blue:#60a5fa;--green:#4ade80;--yellow:#fbbf24;
+}
+body { background:var(--bg0); user-select:none; }
+#screen-contract { background:radial-gradient(ellipse at 50% 0%,#1a0a00 0%,var(--bg0) 70%); }
+#screen-contract h1 { font-size:2.2em; letter-spacing:4px; text-shadow:0 0 30px rgba(249,115,22,0.6); }
+#contract-tagline { color:var(--muted); text-align:center; font-size:0.85em; letter-spacing:2px; margin-bottom:20px; }
+#player-info { background:var(--bg2); padding:10px 24px; border-radius:8px; border:1px solid var(--border); }
+.contract-card { border-radius:12px; transition:border-color 0.2s,transform 0.15s,box-shadow 0.2s; }
+.contract-card:hover { transform:translateY(-3px); box-shadow:0 6px 24px rgba(249,115,22,0.2); }
+.diff-easy{color:#4ade80!important}.diff-medium{color:#fbbf24!important}.diff-hard{color:#ef4444!important}
+.c-done{color:#4ade80;font-size:.78em;margin-top:4px}.c-lock{color:#6b7280;font-size:.78em;margin-top:6px}
+.up-level-bar{display:flex;gap:3px;margin-bottom:8px}
+.up-pip{width:18px;height:5px;border-radius:2px;background:var(--border)}
+.up-pip.filled{background:var(--yellow)}
+/* Briefing screen */
+#screen-briefing{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 0%,#1a0500 0%,var(--bg0) 65%)}
+#briefing-box{background:var(--bg2);border:2px solid var(--orange);border-radius:14px;padding:40px 48px;max-width:540px;width:92%}
+#briefing-box h2{color:var(--orange);font-size:1.5em;margin-bottom:4px;letter-spacing:2px}
+#brief-subtitle{color:var(--muted);font-size:.85em;letter-spacing:1px;margin-bottom:18px}
+#brief-desc{color:#94a3b8;line-height:1.7;margin-bottom:22px}
+#brief-stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px}
+.brief-stat{background:var(--bg1);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:.82em}
+.bs-label{color:var(--muted);margin-bottom:3px}.bs-val{color:var(--yellow);font-weight:bold;font-size:1.05em}
+#briefing-btns{display:flex;gap:12px}
+#btn-start-mission{flex:1;padding:12px;background:var(--orange);border:none;color:white;cursor:pointer;border-radius:8px;font-family:'Courier New',monospace;font-size:1em;font-weight:bold;letter-spacing:1px}
+#btn-start-mission:hover{background:#ea580c}
+#btn-back-brief{padding:12px 20px;background:var(--bg3);border:1px solid var(--border);color:var(--text);cursor:pointer;border-radius:8px;font-family:'Courier New',monospace}
+/* Top bar v2 */
+#topbar{background:var(--bg1);border-bottom:2px solid var(--border)}
+#disp-timer.urgent{color:var(--red);animation:blink .6s infinite alternate}
+@keyframes blink{from{opacity:.6}to{opacity:1}}
+#wind-panel{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:4px 14px;margin:0 auto}
+#wind-label{color:var(--blue);font-weight:bold;font-size:.78em;letter-spacing:2px}
+#disp-wind-dir{color:#93c5fd;font-weight:bold;font-size:1.3em;line-height:1}
+#wind-change-label{color:var(--muted);font-size:.68em;letter-spacing:1px}
+/* Grace overlay */
+#grace-overlay{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;padding-bottom:6px;pointer-events:none}
+#grace-msg{background:rgba(30,95,200,.85);color:white;padding:4px 16px;border-radius:20px;font-size:.8em;letter-spacing:1px;font-weight:bold}
+/* Wind shift toast */
+#wind-shift-toast{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(251,191,36,.92);color:#1a1000;padding:6px 18px;border-radius:20px;font-weight:bold;font-size:.82em;letter-spacing:1px;pointer-events:none;z-index:15;opacity:0;transition:opacity .3s}
+/* Right panel */
+#right-panel{width:215px;background:var(--bg1);border-left:2px solid var(--border);overflow-y:auto;flex-shrink:0;padding:10px 9px;display:flex;flex-direction:column;gap:10px}
+.rp-section{}
+.rp-title{color:var(--orange);font-size:.7em;letter-spacing:2px;border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:8px}
+.ff-item.warn-1{border-color:var(--yellow)}.ff-item.warn-2{border-color:#f97316}.ff-item.warn-3{border-color:var(--red);animation:pulse-d .4s infinite alternate}
+@keyframes pulse-d{from{box-shadow:none}to{box-shadow:0 0 8px rgba(239,68,68,.7)}}
+.ff-row1{display:flex;justify-content:space-between;margin-bottom:3px}
+.ff-name{font-weight:bold}.ff-status-label{color:var(--muted);font-size:.88em}
+.ff-status-label.suppressing{color:var(--green)}.ff-status-label.moving{color:var(--blue)}.ff-status-label.danger{color:var(--red);font-weight:bold}.ff-status-label.break{color:var(--yellow)}
+.hp-fill.hp-hi{background:var(--green)}.hp-fill.hp-mid{background:var(--yellow)}.hp-fill.hp-lo{background:var(--red)}
+.aerial-item{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:7px 8px;margin-bottom:6px;font-size:.78em}
+.aerial-name{color:#93c5fd;font-weight:bold;margin-bottom:4px}.aerial-cost{color:var(--muted)}
+.cd-fill.ready{background:var(--green)}.aerial-status{color:var(--muted)}.aerial-status.ready{color:var(--green);font-weight:bold}
+.fs-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:.79em}.fs-val{color:var(--text);font-weight:bold}
+.burn-bar{width:100%;height:8px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:5px}
+.burn-fill{height:100%;background:linear-gradient(90deg,var(--yellow),var(--red));transition:width .5s}
+#selected-info{font-size:.79em;color:#94a3b8;line-height:1.7}#selected-info strong{color:var(--text)}
+/* Bottom bar */
+#bottombar{height:76px;background:var(--bg1);border-top:2px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;overflow-x:auto}
+.act-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:110px;height:58px;background:var(--bg2);border:2px solid var(--border);color:var(--text);cursor:pointer;border-radius:8px;font-family:'Courier New',monospace;padding:4px 10px;transition:border-color .12s,background .12s,transform .08s;flex-shrink:0;position:relative;overflow:hidden}
+.act-btn:hover:not(.disabled){border-color:var(--orange);background:#1c1206;transform:translateY(-1px)}.act-btn.active{border-color:var(--orange);background:#2c1400}.act-btn.disabled{opacity:.35;cursor:not-allowed}
+.ab-icon{font-size:1.2em;line-height:1}.ab-label{font-size:.75em;font-weight:bold;letter-spacing:.5px}.ab-cost{font-size:.68em;color:var(--yellow)}
+.act-btn-cdbar{position:absolute;bottom:0;left:0;height:3px;background:var(--blue);border-radius:0 0 6px 6px}.act-btn-cdbar.ready{background:var(--green)}
+/* Result screen */
+#screen-result{align-items:center;justify-content:center;background:rgba(0,0,0,.88)}
+#result-box{background:var(--bg2);border:2px solid var(--orange);border-radius:16px;padding:40px 50px;text-align:center;max-width:520px;width:92%;animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.rating-badge{font-size:4.5em;font-weight:bold;line-height:1;margin-bottom:8px}
+.rating-S{color:var(--yellow);text-shadow:0 0 25px rgba(251,191,36,.8)}.rating-A{color:var(--green)}.rating-B{color:var(--blue)}.rating-C{color:var(--muted)}.rating-FAIL{color:var(--red)}
+#result-title{margin-bottom:20px;font-size:1.4em}
+.rs-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.88em}
+.rs-row:last-child{border-bottom:none}.rs-label{color:var(--muted)}.rs-val{font-weight:bold}
+.rs-good{color:var(--green)}.rs-bad{color:var(--red)}.rs-neutral{color:var(--yellow)}
+#result-payout{font-size:1.6em;color:var(--green);font-weight:bold;margin:18px 0 22px}
+.result-btns{display:flex;gap:12px;justify-content:center}
+.result-btn{padding:12px 26px;border:none;cursor:pointer;border-radius:8px;font-family:'Courier New',monospace;font-size:.95em;font-weight:bold;transition:background .15s,transform .1s}
+.result-btn:hover{transform:translateY(-1px)}.result-btn.primary{background:var(--orange);color:white}.result-btn.primary:hover{background:#ea580c}.result-btn.secondary{background:var(--bg3);color:var(--text)}
+/* Game main layout fix */
+#game-main{display:flex;flex:1;overflow:hidden;min-height:0}
+#canvas-wrap{position:relative;background:#000;flex-shrink:0}
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="screen-contract" class="screen active">
-    <h1>WILDFIRE INCIDENT COMMANDER</h1>
-    <div id="player-info">
-      <span>Budget: $<b id="disp-budget">5000</b></span>
-      <span>Missions Completed: <b id="disp-done">0</b></span>
-    </div>
-    <div id="contract-cards"></div>
-    <div id="upgrade-section">
-      <h2>Equipment Upgrades</h2>
-      <div id="upgrade-cards"></div>
-    </div>
+
+<!-- CONTRACT SELECT -->
+<div id="screen-contract" class="screen active">
+  <h1>WILDFIRE INCIDENT COMMANDER</h1>
+  <div id="contract-tagline">PROTECT THE LAND — COMMAND THE FIRE</div>
+  <div id="player-info">
+    <span>Budget: $<b id="disp-budget">5000</b></span>
+    <span>Missions Completed: <b id="disp-done">0</b></span>
   </div>
-  <div id="screen-game" class="screen">
-    <div id="topbar">
-      <div id="mission-info">
-        <span id="disp-mission-name">---</span>
-        <span id="disp-timer">0:00</span>
-      </div>
-      <div id="wind-panel">
-        <div id="wind-label">WIND</div>
-        <canvas id="wind-canvas" width="52" height="52"></canvas>
-        <div id="wind-text">
-          <div id="disp-wind-dir">---</div>
-          <div id="disp-wind-str">---</div>
-        </div>
-        <div id="wind-change-wrap">
-          <div id="wind-change-label">Changes in:</div>
-          <div id="wind-change-bar"><div id="wind-change-fill"></div></div>
-        </div>
-      </div>
-      <div id="resource-panel">
-        <div>Water: <b id="disp-water">0</b></div>
-        <div>Budget: $<b id="disp-money">0</b></div>
-      </div>
-      <div id="game-btns">
-        <button id="btn-pause">Pause</button>
-        <button id="btn-quit">Quit</button>
-      </div>
-    </div>
-    <div id="game-main">
-      <div id="canvas-wrap">
-        <canvas id="game-canvas"></canvas>
-        <div id="danger-warn" class="hidden">FIREFIGHTER IN DANGER!</div>
-      </div>
-      <div id="sidebar">
-        <div class="sb-section">
-          <div class="sb-title">ACTIONS</div>
-          <div id="action-btns"></div>
-        </div>
-        <div class="sb-section">
-          <div class="sb-title">FIREFIGHTERS</div>
-          <div id="ff-list"></div>
-        </div>
-        <div class="sb-section">
-          <div class="sb-title">AIR SUPPORT</div>
-          <div id="aerial-list"></div>
-        </div>
-        <div class="sb-section">
-          <div class="sb-title">FIRE STATUS</div>
-          <div id="fire-status-info"></div>
-        </div>
-        <div class="sb-section">
-          <div class="sb-title">SELECTED</div>
-          <div id="selected-info">Nothing selected</div>
-        </div>
-      </div>
-    </div>
+  <div id="contract-cards"></div>
+  <div id="upgrade-section">
+    <h2>EQUIPMENT UPGRADES</h2>
+    <div id="upgrade-cards"></div>
   </div>
-  <div id="screen-result" class="screen">
-    <div id="result-box">
-      <div id="result-rating-badge"></div>
-      <h2 id="result-title"></h2>
-      <div id="result-stats-list"></div>
-      <div id="result-payout"></div>
-      <button id="btn-continue">Continue</button>
-    </div>
-  </div>
-  <div id="overlay-pause" class="hidden">
-    <div id="pause-box">
-      <h2>PAUSED</h2>
-      <button id="btn-resume">Resume</button>
-      <button id="btn-restart">Restart</button>
-      <button id="btn-menu">Main Menu</button>
+</div>
+
+<!-- BRIEFING -->
+<div id="screen-briefing" class="screen">
+  <div id="briefing-box">
+    <h2>Mission Name</h2>
+    <div id="brief-subtitle"></div>
+    <div id="brief-desc"></div>
+    <div id="brief-stats"></div>
+    <div id="briefing-btns">
+      <button id="btn-back-brief">Back</button>
+      <button id="btn-start-mission">Deploy Units →</button>
     </div>
   </div>
 </div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen">
+  <div id="topbar">
+    <div id="mission-info">
+      <span id="disp-mission-name">---</span>
+      <span id="disp-timer">0:00</span>
+    </div>
+    <div id="wind-panel">
+      <div id="wind-label">WIND</div>
+      <canvas id="wind-canvas" width="52" height="52"></canvas>
+      <div id="wind-text">
+        <div id="disp-wind-dir">---</div>
+        <div id="disp-wind-str">---</div>
+      </div>
+      <div id="wind-change-wrap">
+        <div id="wind-change-label">CHANGES IN</div>
+        <div id="wind-change-bar"><div id="wind-change-fill"></div></div>
+      </div>
+    </div>
+    <div id="resource-panel">
+      <div>Water: <b id="disp-water">0</b></div>
+      <div>Budget: $<b id="disp-money">0</b></div>
+    </div>
+    <div id="game-btns">
+      <button id="btn-pause">Pause</button>
+      <button id="btn-quit">Quit</button>
+    </div>
+  </div>
+  <div id="game-main">
+    <div id="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+      <div id="grace-overlay"><div id="grace-msg"></div></div>
+      <div id="danger-warn" class="hidden">FIREFIGHTER IN DANGER!</div>
+      <div id="wind-shift-toast"></div>
+    </div>
+    <div id="right-panel">
+      <div class="rp-section">
+        <div class="rp-title">FIREFIGHTERS</div>
+        <div id="ff-list"></div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-title">AIR SUPPORT</div>
+        <div id="aerial-list"></div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-title">FIRE STATUS</div>
+        <div id="fire-status-info"></div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-title">SELECTED</div>
+        <div id="selected-info">Click a unit or choose an action</div>
+      </div>
+    </div>
+  </div>
+  <div id="bottombar">
+    <div id="action-btns" style="display:flex;gap:8px;align-items:center"></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="screen-result" class="screen">
+  <div id="result-box">
+    <div id="result-rating-badge" class="rating-badge"></div>
+    <h2 id="result-title"></h2>
+    <div id="result-stats-list"></div>
+    <div id="result-payout"></div>
+    <div class="result-btns" id="result-btns"></div>
+  </div>
+</div>
+
+<!-- PAUSE -->
+<div id="overlay-pause" class="hidden">
+  <div id="pause-box">
+    <h2>PAUSED</h2>
+    <button id="btn-resume">Resume</button>
+    <button id="btn-restart">Restart</button>
+    <button id="btn-menu">Main Menu</button>
+  </div>
+</div>
+
+</div>
 <script>
 // ============================================================
-// GAME CONSTANTS
+// GAME CONSTANTS — v2 (Balanced)
 // ============================================================
+const GRID    = 30;
+const TILE_PX = 20;
 
-const GRID = 30;
-const TILE_PX = 20; // pixels per tile
+const T       = { FOREST: 0, GRASS: 1, WATER: 2, ROCK: 3, BREAK: 4 };
+const T_COLOR = { 0:'#1e5c16', 1:'#4d8f2b', 2:'#1756a3', 3:'#6b6b72', 4:'#857052' };
+const T_NAME  = { 0:'Forest', 1:'Grass', 2:'Water', 3:'Rock', 4:'Firebreak' };
+const T_FLAM  = { 0:1.6, 1:1.0, 2:0, 3:0, 4:0.05 };
 
-// Tile types
-const T = { FOREST: 0, GRASS: 1, WATER: 2, ROCK: 3, BREAK: 4 };
-const T_COLOR  = { 0: '#2a5e1e', 1: '#5a9e35', 2: '#1a5f8e', 3: '#787878', 4: '#8b7355' };
-const T_NAME   = { 0: 'Forest', 1: 'Grass', 2: 'Water', 3: 'Rock', 4: 'Firebreak' };
-// How quickly fire spreads through each tile type (0 = fireproof)
-const T_FLAM   = { 0: 1.6, 1: 1.0, 2: 0, 3: 0, 4: 0.05 };
+const W_NAME        = ['N','NE','E','SE','S','SW','W','NW'];
+const W_VEC         = [[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
+const W_STR_NAME    = { 1:'Light', 2:'Moderate', 3:'Strong' };
+const W_SPREAD_MULT = { 1:1.4, 2:2.5, 3:4.0 }; // was 2/3.8/6.5
 
-// Wind directions: index = direction, value = [dx, dy]
-// 0=N, 1=NE, 2=E, 3=SE, 4=S, 5=SW, 6=W, 7=NW
-const W_NAME  = ['N','NE','E','SE','S','SW','W','NW'];
-const W_VEC   = [[0,-1],[1,-1],[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1]];
-const W_STR_NAME = { 1:'Light', 2:'Moderate', 3:'Strong' };
-
-// How much wind multiplies fire spread in the downwind direction
-const W_SPREAD_MULT = { 1: 2.0, 2: 3.8, 3: 6.5 };
-
-// Fire
 const FIRE_MAX   = 5;
-const FIRE_EVERY = 4;            // update fire every N ticks
-const FIRE_BASE  = 0.0045;       // base spread chance per fire-update
-const FIRE_GROW  = 0.007;        // chance per tick that burning tile gains +1 intensity
-const BURN_OUT   = 480;          // ticks before a burning tile becomes fully charred
+const FIRE_EVERY = 5;       // was 4
+const FIRE_BASE  = 0.0026;  // was 0.0045
+const FIRE_GROW  = 0.005;   // was 0.007
+const BURN_OUT   = 540;
 
-// Game tick
-const TICK_MS = 50; // ms per tick (20 ticks/sec)
+const TICK_MS      = 50;
+const WIND_CHG_MIN = 25000;
+const WIND_CHG_MAX = 48000;
+const GRACE_MS     = 9000;  // fire won't spread for first 9 s
 
-// Wind change timing (ms)
-const WIND_CHG_MIN = 22000;
-const WIND_CHG_MAX = 42000;
-
-// Firefighter risk (checked every N ticks)
-const RISK_EVERY  = 38;
-const RISK_CHANCE = { 1: 0.10, 2: 0.22, 3: 0.45 };
-const RISK_DMG    = 30;
+const RISK_EVERY  = 42;
+const RISK_CHANCE = { 1:0.05, 2:0.12, 3:0.26 }; // was 0.10/0.22/0.45
+const RISK_DMG    = 18;  // was 30
 const FF_HP_MAX   = 100;
 
-// Firefighter suppression (per tick standing on burning tile)
-const FF_SUPP_RATE   = 0.045; // intensity units reduced per tick
-const FF_MOVE_TICKS  = 16;    // ticks to traverse one tile
-const FF_BREAK_TICKS = 110;   // ticks to create a firebreak
+// Warning ticks accumulate while FF is in danger; damage only at CRITICAL
+const WARN_CAUTION  = 24;
+const WARN_MEDIUM   = 58;
+const WARN_CRITICAL = 100;
 
-// Aerial units
-const HELI_COOLDOWN_MS = 15000;
-const HELI_WATER_COST  = 65;
-const HELI_INTENSITY_REDUCE = 5; // fully extinguishes center + reduces neighbors
+const FF_SUPP_RATE   = 0.085; // was 0.045
+const FF_MOVE_TICKS  = 9;     // was 16
+const FF_BREAK_TICKS = 100;
 
-const PLANE_COOLDOWN_MS = 35000;
-const PLANE_WATER_COST  = 200;
-const PLANE_LINE        = 6; // tiles dropped in a line
+const HELI_COOLDOWN_MS      = 12000;
+const HELI_WATER_COST       = 55;
+const HELI_INTENSITY_REDUCE = 5;
+const PLANE_COOLDOWN_MS     = 28000;
+const PLANE_WATER_COST      = 160;
+const PLANE_LINE            = 6;
 
-// Deploy costs (budget)
-const COST_FF   = 350;
-const COST_HELI = 0; // already assigned per contract; extra helis cost more
+const COST_FF       = 280;
+const BURN_LOSE_PCT = 0.50;
 
-// Win/lose thresholds
-const BURN_LOSE_PCT = 0.50; // fraction of flammable tiles that triggers loss
+const REWARD_TILE  = 8;   // $ per fire tile extinguished
+const REWARD_CLOSE = 200; // $ close-call bonus
 // ============================================================
 // CONTRACT / MISSION DEFINITIONS
 // ============================================================
@@ -932,40 +1032,34 @@ function getDangerZones(map, wind) {
   return zones;
 }
 // ============================================================
-// UNITS SYSTEM
+// UNITS SYSTEM — v2 (smooth movement, warning levels)
 // ============================================================
-
 let _ffIdSeq = 0;
 
 function ffCreate(x, y) {
+  const rx = x * TILE_PX + TILE_PX / 2;
+  const ry = y * TILE_PX + TILE_PX / 2;
   return {
     id: _ffIdSeq++,
     x, y,
-    hp: FF_HP_MAX,
-    maxHp: FF_HP_MAX,
-    // Movement
-    moving: false,
-    targetX: x, targetY: y,
-    moveProg: 0,   // ticks remaining to reach target
-    // Firebreak
-    makingBreak: false,
-    breakProgress: 0,
-    breakX: -1, breakY: -1,
-    // Risk
-    inDanger: false,
-    riskTick: 0,
-    // Status label
+    hp: FF_HP_MAX, maxHp: FF_HP_MAX,
+    renderX: rx, renderY: ry,         // smooth pixel position
+    startPixX: rx, startPixY: ry,
+    totalMoveTicks: 1, moveProg: 0,
+    moving: false, targetX: x, targetY: y,
+    walkCycle: 0,
+    makingBreak: false, breakProgress: 0, breakX: -1, breakY: -1,
+    inDanger: false, dangerTicks: 0, warnLevel: 0,
+    closeCallPending: false,
     status: 'Idle',
   };
 }
 
-// Create aerial unit descriptor
 function aerialCreate(type, count) {
   const isHeli = type === 'helicopter';
   return {
-    type,
+    type, count,
     label: isHeli ? 'Helicopter' : 'Plane',
-    count,
     cooldownMs: 0,
     maxCooldownMs: isHeli ? HELI_COOLDOWN_MS : PLANE_COOLDOWN_MS,
     waterCost: isHeli ? HELI_WATER_COST : PLANE_WATER_COST,
@@ -973,110 +1067,93 @@ function aerialCreate(type, count) {
   };
 }
 
-// Move a firefighter toward its target (call each tick)
-function ffUpdateMovement(ff) {
-  if (!ff.moving) return;
-  ff.moveProg--;
-  if (ff.moveProg <= 0) {
-    ff.x = ff.targetX;
-    ff.y = ff.targetY;
-    ff.moving = false;
-    ff.status = 'Idle';
-  }
-}
+function _ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
 
-// Order a firefighter to move to (tx, ty).
-// moveTicks: ticks per tile (pass upgrade-adjusted value from game.js)
 function ffMoveTo(ff, tx, ty, moveTicks) {
   if (ff.x === tx && ff.y === ty) return;
   moveTicks = moveTicks || FF_MOVE_TICKS;
-  ff.targetX = tx;
-  ff.targetY = ty;
+  ff.startPixX = ff.renderX; ff.startPixY = ff.renderY;
+  ff.targetX = tx; ff.targetY = ty;
   const dist = Math.max(Math.abs(tx - ff.x), Math.abs(ty - ff.y));
-  ff.moving = true;
-  ff.moveProg = dist * moveTicks;
-  ff.makingBreak = false;
-  ff.status = 'Moving';
+  ff.totalMoveTicks = Math.max(1, dist * moveTicks);
+  ff.moveProg = ff.totalMoveTicks;
+  ff.moving = true; ff.makingBreak = false; ff.status = 'Moving';
 }
 
-// Order a firefighter to create firebreak at (tx, ty)
+function ffUpdateMovement(ff) {
+  if (!ff.moving) {
+    ff.renderX = ff.x * TILE_PX + TILE_PX / 2;
+    ff.renderY = ff.y * TILE_PX + TILE_PX / 2;
+    return;
+  }
+  ff.moveProg--;
+  ff.walkCycle = (ff.walkCycle + 1) % 16;
+  const p = _ease(1 - ff.moveProg / ff.totalMoveTicks);
+  ff.renderX = ff.startPixX + (ff.targetX * TILE_PX + TILE_PX/2 - ff.startPixX) * p;
+  ff.renderY = ff.startPixY + (ff.targetY * TILE_PX + TILE_PX/2 - ff.startPixY) * p;
+  if (ff.moveProg <= 0) {
+    ff.x = ff.targetX; ff.y = ff.targetY;
+    ff.renderX = ff.x * TILE_PX + TILE_PX/2;
+    ff.renderY = ff.y * TILE_PX + TILE_PX/2;
+    ff.moving = false; ff.status = 'Idle';
+  }
+}
+
 function ffStartFirebreak(ff, map, tx, ty) {
   const tile = tileAt(map, tx, ty);
   if (!tile || tile.fireIntensity > 0 || tile.type === T.WATER || tile.type === T.ROCK) return false;
   if (tile.firebreak || tile.burned) return false;
-  ff.makingBreak = true;
-  ff.breakProgress = FF_BREAK_TICKS;
-  ff.breakX = tx;
-  ff.breakY = ty;
-  ff.status = 'Firebreak';
+  ff.makingBreak = true; ff.breakProgress = FF_BREAK_TICKS;
+  ff.breakX = tx; ff.breakY = ty; ff.status = 'Firebreak';
   return true;
 }
 
-// Tick firefighter firebreak construction
 function ffUpdateFirebreak(ff, map) {
   if (!ff.makingBreak) return;
   ff.breakProgress--;
   if (ff.breakProgress <= 0) {
     const tile = tileAt(map, ff.breakX, ff.breakY);
-    if (tile) {
-      tile.type = T.BREAK;
-      tile.firebreak = true;
-      tile.fireIntensity = 0;
-    }
-    ff.makingBreak = false;
-    ff.status = 'Idle';
+    if (tile) { tile.type = T.BREAK; tile.firebreak = true; tile.fireIntensity = 0; }
+    ff.makingBreak = false; ff.status = 'Idle';
   }
 }
 
-// Passive suppression: reduce fire intensity on current tile
-function ffSuppressTile(ff, map) {
-  const tile = tileAt(map, ff.x, ff.y);
-  if (!tile || tile.fireIntensity <= 0) return;
-  tile.fireIntensity = Math.max(0, tile.fireIntensity - FF_SUPP_RATE);
-  if (tile.fireIntensity === 0) tile.burnTime = 0;
-  ff.status = 'Suppressing';
-}
-
-// Check if firefighter is in danger; updates ff.inDanger.
-// Damage is applied by the caller using upgrade-adjusted values.
+// Returns true when FF first enters danger (so caller can play alarm once)
 function ffCheckDanger(ff, map, wind, tick) {
-  if (tick % RISK_EVERY !== 0) return;
-
   const wv = W_VEC[wind.dir];
-  let fireThreat = false;
-
-  // Standing on burning tile
+  let threat = false;
   const cur = tileAt(map, ff.x, ff.y);
-  if (cur && cur.fireIntensity >= 2) fireThreat = true;
-
-  if (!fireThreat) {
-    // Fire is upwind and heading toward this firefighter
-    for (let dist = 1; dist <= 2; dist++) {
-      const ux = Math.round(ff.x - wv[0] * dist);
-      const uy = Math.round(ff.y - wv[1] * dist);
-      const upwindTile = tileAt(map, ux, uy);
-      if (upwindTile && upwindTile.fireIntensity >= 2) {
-        fireThreat = true;
-        break;
-      }
+  if (cur && cur.fireIntensity >= 2) threat = true;
+  if (!threat) {
+    for (let d = 1; d <= 2; d++) {
+      const t = tileAt(map, Math.round(ff.x - wv[0]*d), Math.round(ff.y - wv[1]*d));
+      if (t && t.fireIntensity >= 2) { threat = true; break; }
     }
   }
-
-  ff.inDanger = fireThreat;
+  const wasInDanger = ff.inDanger;
+  ff.inDanger = threat;
+  if (threat) {
+    ff.dangerTicks++;
+    const prev = ff.warnLevel;
+    ff.warnLevel = ff.dangerTicks < WARN_CAUTION ? 0
+                 : ff.dangerTicks < WARN_MEDIUM  ? 1
+                 : ff.dangerTicks < WARN_CRITICAL ? 2 : 3;
+    if (ff.warnLevel >= 2) ff.closeCallPending = true;
+  } else {
+    ff.dangerTicks = Math.max(0, ff.dangerTicks - 3);
+    ff.warnLevel   = ff.dangerTicks < WARN_CAUTION ? 0 : 1;
+    if (ff.dangerTicks === 0) ff.inDanger = false;
+  }
+  return !wasInDanger && threat; // true = newly dangerous
 }
 
-// Update aerial cooldowns
 function aerialUpdate(aerial, dt) {
-  if (aerial.cooldownMs > 0) {
-    aerial.cooldownMs = Math.max(0, aerial.cooldownMs - dt);
-  }
+  if (aerial.cooldownMs > 0) aerial.cooldownMs = Math.max(0, aerial.cooldownMs - dt);
   aerial.ready = aerial.cooldownMs === 0;
 }
 
-// Deploy aerial unit; returns true if successful
 function aerialDeploy(aerial, water) {
-  if (!aerial.ready || aerial.count <= 0) return false;
-  if (water < aerial.waterCost) return false;
+  if (!aerial.ready || aerial.count <= 0 || water < aerial.waterCost) return false;
   aerial.cooldownMs = aerial.maxCooldownMs;
   aerial.ready = false;
   return true;
@@ -1194,1039 +1271,1157 @@ function getFFSuppRate(player) {
   return FF_SUPP_RATE * (1 + lvl * 0.30);
 }
 // ============================================================
-// RENDERER
+// AUDIO SYSTEM — synthetic Web Audio API sounds
+// ============================================================
+const SFX = (function () {
+  let _ctx = null, _master = null, _dangerCD = 0;
+
+  function _init() {
+    if (_ctx) return true;
+    try {
+      _ctx = new (window.AudioContext || window.webkitAudioContext)();
+      _master = _ctx.createGain(); _master.gain.value = 0.65;
+      _master.connect(_ctx.destination); return true;
+    } catch(e) { return false; }
+  }
+
+  function unlock() { _init(); if (_ctx && _ctx.state === 'suspended') _ctx.resume(); }
+
+  function _osc(type, freq, dur, vol, delay) {
+    if (!_init()) return;
+    const t0 = _ctx.currentTime + (delay||0);
+    const o = _ctx.createOscillator(), g = _ctx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+    o.connect(g); g.connect(_master);
+    o.start(t0); o.stop(t0 + dur + 0.01);
+  }
+
+  function _noise(dur, filterHz, filterType, vol, delay) {
+    if (!_init()) return;
+    const t0 = _ctx.currentTime + (delay||0);
+    const sr = _ctx.sampleRate;
+    const buf = _ctx.createBuffer(1, Math.ceil(sr*dur), sr);
+    const d = buf.getChannelData(0);
+    for (let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const src = _ctx.createBufferSource(); src.buffer = buf;
+    const f = _ctx.createBiquadFilter(); f.type = filterType||'bandpass'; f.frequency.value = filterHz; f.Q.value=1.5;
+    const g = _ctx.createGain(); g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+    src.connect(f); f.connect(g); g.connect(_master);
+    src.start(t0); src.stop(t0+dur+0.01);
+  }
+
+  function click()     { _osc('sine', 680, 0.07, 0.15); }
+  function extinguish(){ _noise(0.16, 2200, 'highpass', 0.18); }
+
+  function waterDrop(isPlane) {
+    if (!_init()) return;
+    const t0=_ctx.currentTime, dur=isPlane?0.5:0.3, f0=isPlane?300:500;
+    const o=_ctx.createOscillator(), g=_ctx.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(f0,t0); o.frequency.exponentialRampToValueAtTime(80,t0+dur);
+    g.gain.setValueAtTime(isPlane?0.4:0.32,t0); g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+    o.connect(g); g.connect(_master); o.start(t0); o.stop(t0+dur+0.01);
+    _noise(0.15, 1600, 'highpass', isPlane?0.28:0.18);
+  }
+
+  function danger() {
+    if (_dangerCD>0) return; _dangerCD=55;
+    _osc('square',880,0.12,0.13,0.00);
+    _osc('square',660,0.12,0.13,0.15);
+  }
+
+  function windShift() {
+    if (!_init()) return;
+    const t0=_ctx.currentTime, dur=0.6;
+    const sr=_ctx.sampleRate, buf=_ctx.createBuffer(1,Math.ceil(sr*dur),sr);
+    const d=buf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const src=_ctx.createBufferSource(); src.buffer=buf;
+    const f=_ctx.createBiquadFilter(); f.type='bandpass'; f.Q.value=2;
+    f.frequency.setValueAtTime(150,t0); f.frequency.linearRampToValueAtTime(900,t0+0.25); f.frequency.linearRampToValueAtTime(200,t0+dur);
+    const g=_ctx.createGain(); g.gain.setValueAtTime(0.001,t0); g.gain.linearRampToValueAtTime(0.3,t0+0.1); g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+    src.connect(f); f.connect(g); g.connect(_master); src.start(t0); src.stop(t0+dur+0.01);
+  }
+
+  function success() {
+    [523,659,784,1047].forEach((f,i)=>_osc('sine',f,0.35,0.2,i*0.1));
+  }
+
+  function closeCall() {
+    if (!_init()) return;
+    const t0=_ctx.currentTime;
+    const o=_ctx.createOscillator(), g=_ctx.createGain();
+    o.type='triangle'; o.frequency.setValueAtTime(580,t0); o.frequency.exponentialRampToValueAtTime(290,t0+0.3);
+    g.gain.setValueAtTime(0.22,t0); g.gain.exponentialRampToValueAtTime(0.001,t0+0.3);
+    o.connect(g); g.connect(_master); o.start(t0); o.stop(t0+0.35);
+  }
+
+  function tick() { if (_dangerCD>0) _dangerCD--; }
+
+  return { unlock, click, waterDrop, danger, windShift, extinguish, success, closeCall, tick };
+})();
+// ============================================================
+// RENDERER — v2 (particles, floating text, screen shake,
+//               smooth FF movement, improved fire visuals)
 // ============================================================
 
 let canvas, ctx, windCvs, windCtx;
 
 function initRenderer() {
-  canvas   = document.getElementById('game-canvas');
-  ctx      = canvas.getContext('2d');
-  windCvs  = document.getElementById('wind-canvas');
-  windCtx  = windCvs.getContext('2d');
+  canvas  = document.getElementById('game-canvas');
+  ctx     = canvas.getContext('2d');
+  windCvs = document.getElementById('wind-canvas');
+  windCtx = windCvs.getContext('2d');
   canvas.width  = GRID * TILE_PX;
   canvas.height = GRID * TILE_PX;
 }
 
-let _renderTick = 0; // for flicker animation
+// ---- Animation clock ----
+let _rt = 0; // render tick
 
-// -----------------------------------------------------------
-// Main render call
-// -----------------------------------------------------------
-function render(G) {
-  _renderTick++;
-  if (!G) return;
+// ---- Screen shake ----
+let _shake = 0;
+function triggerShake(amt) { _shake = Math.max(_shake, amt); }
 
-  const { map, wind, firefighters, aerials, selectedFF, actionMode, hoverX, hoverY } = G;
-  const dangerZones = getDangerZones(map, wind);
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // 1. Draw tiles
-  for (let y = 0; y < GRID; y++) {
-    for (let x = 0; x < GRID; x++) {
-      drawTile(x, y, map[y][x], dangerZones.has(y * GRID + x));
-    }
+// ---- Particle system ----
+const _particles = [];
+function addParticles(worldX, worldY, type) {
+  const cx = worldX * TILE_PX + TILE_PX/2;
+  const cy = worldY * TILE_PX + TILE_PX/2;
+  const count = type === 'water' ? 10 : 6;
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = type === 'water' ? 1.5 + Math.random()*3 : 0.3 + Math.random()*1.2;
+    _particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle)*spd, vy: Math.sin(angle)*spd - (type==='water'?1:0.5),
+      life: type === 'water' ? 22+Math.random()*14 : 30+Math.random()*20,
+      maxLife: type === 'water' ? 36 : 50,
+      r: type === 'water' ? 2+Math.random()*2 : 1.5+Math.random()*2,
+      color: type === 'water' ? '#60a5fa' : `hsl(${20+Math.random()*20},10%,${40+Math.random()*20}%)`,
+      type,
+    });
   }
-
-  // 2. Draw fire overlays
-  for (let y = 0; y < GRID; y++) {
-    for (let x = 0; x < GRID; x++) {
-      const fi = map[y][x].fireIntensity;
-      if (fi > 0) drawFire(x, y, fi);
-    }
-  }
-
-  // 3. Hover preview
-  if (hoverX >= 0 && hoverY >= 0 && hoverX < GRID && hoverY < GRID) {
-    drawHover(hoverX, hoverY, actionMode, G);
-  }
-
-  // 4. Units
-  for (const ff of firefighters) drawFF(ff, ff.id === (selectedFF && selectedFF.id));
-
-  // 5. Grid lines (subtle)
-  drawGridLines();
-
-  // 6. Danger zone markers (on top of everything)
-  for (const ff of firefighters) {
-    if (ff.inDanger) drawDangerMarker(ff.x, ff.y);
-  }
-
-  // Update HUD panels
-  renderWindArrow(wind);
-  renderHUD(G);
-  renderSidebar(G, dangerZones);
 }
 
-// -----------------------------------------------------------
-// Tile rendering
-// -----------------------------------------------------------
-function drawTile(x, y, tile, isDanger) {
-  const px = x * TILE_PX, py = y * TILE_PX;
+function _updateParticles() {
+  for (let i = _particles.length-1; i >= 0; i--) {
+    const p = _particles[i];
+    p.x += p.vx; p.y += p.vy;
+    p.vy += p.type === 'water' ? 0.18 : -0.06; // water falls, smoke rises
+    p.vx *= 0.96;
+    p.life--;
+    if (p.life <= 0) _particles.splice(i, 1);
+  }
+}
 
-  if (tile.burned) {
-    ctx.fillStyle = '#1a0d00';
-    ctx.fillRect(px, py, TILE_PX, TILE_PX);
-    // Ash speckle
-    ctx.fillStyle = '#2a1a08';
-    if ((x + y) % 3 === 0) ctx.fillRect(px + 6, py + 6, 3, 3);
-    return;
+function _drawParticles() {
+  for (const p of _particles) {
+    const alpha = p.life / p.maxLife;
+    ctx.globalAlpha = alpha * 0.85;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * alpha, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ---- Floating text system ----
+const _floats = [];
+function addFloatText(worldX, worldY, text, color) {
+  _floats.push({
+    x: worldX * TILE_PX + TILE_PX/2,
+    y: worldY * TILE_PX,
+    text, color: color||'#fbbf24',
+    life: 55, maxLife: 55,
+  });
+}
+
+function _updateFloats() {
+  for (let i = _floats.length-1; i >= 0; i--) {
+    _floats[i].life--;
+    if (_floats[i].life <= 0) _floats.splice(i, 1);
+  }
+}
+
+function _drawFloats() {
+  ctx.textAlign = 'center';
+  for (const f of _floats) {
+    const t = f.life / f.maxLife;
+    const dy = (1-t) * -26;
+    ctx.globalAlpha = Math.min(1, t * 2);
+    ctx.font = `bold ${11 + Math.round(3*Math.min(1,t*3))}px Courier New`;
+    ctx.fillStyle = '#000';
+    ctx.fillText(f.text, f.x+1, f.y+dy+1);
+    ctx.fillStyle = f.color;
+    ctx.fillText(f.text, f.x, f.y+dy);
+  }
+  ctx.globalAlpha = 1; ctx.textAlign = 'left';
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
+function render(G) {
+  if (!G || !ctx) return;
+  _rt++;
+  _updateParticles();
+  _updateFloats();
+
+  const dangerZones = getDangerZones(G.map, G.wind);
+  const shake = _shake > 0;
+
+  ctx.save();
+  if (shake) {
+    const sx = (Math.random()-0.5)*_shake*2, sy = (Math.random()-0.5)*_shake*2;
+    ctx.translate(sx, sy);
+    _shake = Math.max(0, _shake - 0.6);
   }
 
+  ctx.clearRect(-4, -4, canvas.width+8, canvas.height+8);
+
+  // 1. Tiles
+  for (let y=0;y<GRID;y++) for (let x=0;x<GRID;x++)
+    _drawTile(x, y, G.map[y][x], dangerZones.has(y*GRID+x));
+
+  // 2. Fire overlays
+  for (let y=0;y<GRID;y++) for (let x=0;x<GRID;x++)
+    if (G.map[y][x].fireIntensity > 0) _drawFire(x, y, G.map[y][x].fireIntensity);
+
+  // 3. Hover preview
+  if (G.hoverX >= 0 && G.hoverX < GRID && G.hoverY >= 0 && G.hoverY < GRID)
+    _drawHover(G.hoverX, G.hoverY, G.actionMode, G);
+
+  // 4. Firefighter path lines (when move mode selected)
+  if (G.actionMode === 'move' && G.selectedFF)
+    _drawMovePath(G.selectedFF, G.hoverX, G.hoverY);
+
+  // 5. Particles
+  _drawParticles();
+
+  // 6. Firefighters
+  for (const ff of G.firefighters) _drawFF(ff, G.selectedFF && G.selectedFF.id === ff.id);
+
+  // 7. Grid lines
+  _drawGrid();
+
+  // 8. Floating text
+  _drawFloats();
+
+  ctx.restore();
+
+  // HTML-based HUD updates
+  _renderHUD(G);
+  _renderRightPanel(G, dangerZones);
+  _renderBottomBar(G);
+  _renderWindArrow(G.wind);
+}
+
+// ============================================================
+// TILE DRAWING
+// ============================================================
+function _drawTile(x, y, tile, isDanger) {
+  const px=x*TILE_PX, py=y*TILE_PX;
+  if (tile.burned) {
+    ctx.fillStyle = '#120800';
+    ctx.fillRect(px, py, TILE_PX, TILE_PX);
+    if ((x+y)%4===0) { ctx.fillStyle='#1e1006'; ctx.fillRect(px+5,py+5,4,4); }
+    return;
+  }
   ctx.fillStyle = T_COLOR[tile.type];
   ctx.fillRect(px, py, TILE_PX, TILE_PX);
 
-  // Firebreak pattern
-  if (tile.firebreak) {
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    for (let i = 0; i < TILE_PX; i += 4) {
-      ctx.fillRect(px + i, py, 2, TILE_PX);
-    }
+  // Forest texture dots
+  if (tile.type === T.FOREST) {
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    if ((x*3+y*7)%5===0) ctx.fillRect(px+4,py+3,3,4);
+    if ((x*7+y*3)%5===0) ctx.fillRect(px+12,py+10,3,4);
   }
 
-  // Danger zone overlay
-  if (isDanger && tile.fireIntensity === 0) {
-    const alpha = 0.18 + 0.12 * Math.sin(_renderTick * 0.15);
-    ctx.fillStyle = `rgba(255, 50, 0, ${alpha})`;
+  // Firebreak hatching
+  if (tile.firebreak) {
+    ctx.fillStyle='rgba(0,0,0,0.22)';
+    for (let i=0;i<TILE_PX;i+=5) ctx.fillRect(px+i,py,2,TILE_PX);
+  }
+
+  // Danger zone tint
+  if (isDanger && tile.fireIntensity===0) {
+    const a = 0.14 + 0.10*Math.sin(_rt*0.14);
+    ctx.fillStyle = `rgba(255,50,0,${a})`;
     ctx.fillRect(px, py, TILE_PX, TILE_PX);
   }
 }
 
-function drawFire(x, y, intensity) {
-  const px = x * TILE_PX, py = y * TILE_PX;
-  const flicker = 0.85 + 0.15 * Math.sin(_renderTick * 0.22 + x * 0.7 + y * 0.5);
+// ============================================================
+// FIRE DRAWING — multi-layer glow with color gradient by intensity
+// ============================================================
+const _FIRE_INNER = ['','#ffe066','#ffaa00','#ff6600','#ff2200','#cc0000'];
+const _FIRE_OUTER = ['','rgba(255,200,50,0.4)','rgba(255,120,0,0.5)','rgba(255,80,0,0.6)','rgba(220,20,0,0.65)','rgba(160,0,0,0.7)'];
 
-  const alphaMap = { 1: 0.45, 2: 0.60, 3: 0.72, 4: 0.85, 5: 0.95 };
-  const alpha = (alphaMap[intensity] || 0.5) * flicker;
+function _drawFire(x, y, intensity) {
+  const px=x*TILE_PX, py=y*TILE_PX;
+  const cx=px+TILE_PX/2, cy=py+TILE_PX/2;
+  const flicker = 0.82 + 0.18*Math.sin(_rt*0.21 + x*0.8 + y*0.6);
 
-  // Base orange glow
-  const grad = ctx.createRadialGradient(
-    px + TILE_PX / 2, py + TILE_PX / 2, 0,
-    px + TILE_PX / 2, py + TILE_PX / 2, TILE_PX * 0.7
-  );
-  grad.addColorStop(0, `rgba(255, 200, 50, ${alpha})`);
-  grad.addColorStop(0.5, `rgba(255, 80, 10, ${alpha})`);
-  grad.addColorStop(1, `rgba(180, 10, 0, ${alpha * 0.6})`);
+  // Outer glow
+  const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,TILE_PX*0.85);
+  grad.addColorStop(0, _FIRE_INNER[intensity]);
+  grad.addColorStop(1, _FIRE_OUTER[intensity]);
+  ctx.globalAlpha = flicker;
   ctx.fillStyle = grad;
-  ctx.fillRect(px, py, TILE_PX, TILE_PX);
+  ctx.fillRect(px,py,TILE_PX,TILE_PX);
+  ctx.globalAlpha = 1;
 
-  // Flame tip flicker at high intensity
+  // Bright core at high intensity
+  if (intensity >= 4) {
+    ctx.globalAlpha = 0.7 * flicker;
+    ctx.fillStyle = '#fff8cc';
+    ctx.fillRect(cx-2,cy-2,4,4);
+    ctx.globalAlpha = 1;
+  }
+
+  // Flickering tip spark
   if (intensity >= 3) {
-    const fx = px + 4 + ((_renderTick + x) % 5) * 2;
-    ctx.fillStyle = `rgba(255, 255, 100, ${0.6 * flicker})`;
-    ctx.fillRect(fx, py + 1, 3, 4);
+    const sx = px+3+((_rt+x*3)%6)*2, sy = py+1;
+    ctx.globalAlpha = 0.55*flicker;
+    ctx.fillStyle = '#ffffc0';
+    ctx.fillRect(sx, sy, 2, 3);
+    ctx.globalAlpha = 1;
   }
 }
 
-function drawDangerMarker(x, y) {
-  const px = x * TILE_PX, py = y * TILE_PX;
-  const flash = Math.sin(_renderTick * 0.3) > 0;
-  if (flash) {
-    ctx.strokeStyle = '#ff0000';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(px + 1, py + 1, TILE_PX - 2, TILE_PX - 2);
+// ============================================================
+// HOVER PREVIEW
+// ============================================================
+function _drawHover(hx, hy, mode, G) {
+  const px=hx*TILE_PX, py=hy*TILE_PX;
+  ctx.strokeStyle='rgba(255,255,255,0.75)';
+  ctx.lineWidth=2;
+  ctx.strokeRect(px+1,py+1,TILE_PX-2,TILE_PX-2);
+
+  if (mode==='heli_drop') {
+    ctx.fillStyle='rgba(96,165,250,0.35)';
+    ctx.fillRect(px,py,TILE_PX,TILE_PX);
+    ctx.fillStyle='rgba(96,165,250,0.18)';
+    for (const [dx,dy] of NEIGHBORS) {
+      const nx=hx+dx,ny=hy+dy;
+      if (nx>=0&&nx<GRID&&ny>=0&&ny<GRID) ctx.fillRect(nx*TILE_PX,ny*TILE_PX,TILE_PX,TILE_PX);
+    }
+  } else if (mode==='plane_run') {
+    const wv=W_VEC[G.wind.dir], pd=-wv[1], pe=wv[0];
+    const pl=getPlaneLine(G.player), half=Math.floor(pl/2);
+    ctx.fillStyle='rgba(96,165,250,0.32)';
+    for (let i=-half;i<=half;i++) {
+      const tx=Math.round(hx+pd*i),ty=Math.round(hy+pe*i);
+      if (tx>=0&&tx<GRID&&ty>=0&&ty<GRID) ctx.fillRect(tx*TILE_PX,ty*TILE_PX,TILE_PX,TILE_PX);
+    }
+  } else if (mode==='firebreak') {
+    ctx.fillStyle='rgba(133,112,82,0.45)'; ctx.fillRect(px,py,TILE_PX,TILE_PX);
+  } else if (mode==='deploy_ff') {
+    ctx.fillStyle='rgba(251,191,36,0.28)'; ctx.fillRect(px,py,TILE_PX,TILE_PX);
   }
 }
 
-function drawGridLines() {
-  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-  ctx.lineWidth = 0.5;
-  for (let x = 0; x <= GRID; x++) {
-    ctx.beginPath(); ctx.moveTo(x * TILE_PX, 0); ctx.lineTo(x * TILE_PX, canvas.height); ctx.stroke();
-  }
-  for (let y = 0; y <= GRID; y++) {
-    ctx.beginPath(); ctx.moveTo(0, y * TILE_PX); ctx.lineTo(canvas.width, y * TILE_PX); ctx.stroke();
-  }
+function _drawMovePath(ff, hx, hy) {
+  if (hx<0||hy<0||hx>=GRID||hy>=GRID) return;
+  ctx.strokeStyle='rgba(255,255,255,0.45)';
+  ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath();
+  ctx.moveTo(ff.renderX, ff.renderY);
+  ctx.lineTo(hx*TILE_PX+TILE_PX/2, hy*TILE_PX+TILE_PX/2);
+  ctx.stroke(); ctx.setLineDash([]);
+  // Target dot
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  ctx.beginPath(); ctx.arc(hx*TILE_PX+TILE_PX/2,hy*TILE_PX+TILE_PX/2,3,0,Math.PI*2); ctx.fill();
 }
 
-// -----------------------------------------------------------
-// Firefighter rendering
-// -----------------------------------------------------------
-function drawFF(ff, selected) {
-  const px = ff.x * TILE_PX + TILE_PX / 2;
-  const py = ff.y * TILE_PX + TILE_PX / 2;
-  const r = 5;
+// ============================================================
+// FIREFIGHTER DRAWING
+// ============================================================
+function _drawFF(ff, selected) {
+  const px=ff.renderX, py=ff.renderY;
+  const r=5;
+
+  // Warning level glow
+  if (ff.warnLevel >= 1) {
+    const wColors=['','rgba(251,191,36,0.35)','rgba(249,115,22,0.45)','rgba(239,68,68,0.55)'];
+    const pulsed = ff.warnLevel===3 ? (Math.sin(_rt*0.35)>0?1:0.4) : 1;
+    ctx.globalAlpha = pulsed;
+    ctx.fillStyle = wColors[ff.warnLevel];
+    ctx.beginPath(); ctx.arc(px,py,r+5,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=1;
+  }
 
   // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.5)';
-  ctx.beginPath();
-  ctx.ellipse(px + 1, py + 2, r, r * 0.5, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillStyle='rgba(0,0,0,0.4)';
+  ctx.beginPath(); ctx.ellipse(px+1,py+3,r,r*0.4,0,0,Math.PI*2); ctx.fill();
 
-  // Body
-  const hpFrac = ff.hp / ff.maxHp;
-  const bodyColor = ff.inDanger
-    ? (Math.sin(_renderTick * 0.4) > 0 ? '#ff4040' : '#ffff00')
-    : (hpFrac > 0.6 ? '#fbbf24' : hpFrac > 0.3 ? '#f97316' : '#ef4444');
+  // Body color based on HP
+  const hpFrac = ff.hp/ff.maxHp;
+  let bodyColor = hpFrac>0.6?'#fbbf24':hpFrac>0.3?'#f97316':'#ef4444';
+  if (ff.warnLevel===3 && _rt%10<5) bodyColor='#ff4444';
 
   ctx.fillStyle = bodyColor;
-  ctx.beginPath();
-  ctx.arc(px, py, r, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill();
 
-  // Helmet
-  ctx.fillStyle = '#1e40af';
-  ctx.beginPath();
-  ctx.ellipse(px, py - 3, 4, 3, 0, 0, Math.PI * 2);
-  ctx.fill();
+  // Walking bob
+  if (ff.moving) {
+    const bob = Math.sin(ff.walkCycle/16*Math.PI*2)*2;
+    ctx.fillStyle='#1e40af';
+    ctx.beginPath(); ctx.ellipse(px,py-3+bob,3.5,2.5,0,0,Math.PI*2); ctx.fill();
+  } else {
+    ctx.fillStyle='#1e40af';
+    ctx.beginPath(); ctx.ellipse(px,py-3,3.5,2.5,0,0,Math.PI*2); ctx.fill();
+  }
+
+  // Suppression animation: radiating arc
+  if (ff.status==='Suppressing') {
+    const prog = (_rt%20)/20;
+    ctx.strokeStyle=`rgba(96,165,250,${0.8-prog*0.6})`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.arc(px,py,r+2+prog*5,0,Math.PI*2); ctx.stroke();
+  }
+
+  // Firebreak progress ring
+  if (ff.makingBreak) {
+    const frac=1-ff.breakProgress/FF_BREAK_TICKS;
+    ctx.strokeStyle='#86efac'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(px,py,r+4,-Math.PI/2,-Math.PI/2+frac*Math.PI*2); ctx.stroke();
+  }
 
   // Selection ring
   if (selected) {
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(px, py, r + 3, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.strokeStyle='#ffffff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(px,py,r+4,0,Math.PI*2); ctx.stroke();
   }
 
-  // Movement target line
-  if (ff.moving) {
-    const tx = ff.targetX * TILE_PX + TILE_PX / 2;
-    const ty = ff.targetY * TILE_PX + TILE_PX / 2;
-    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 3]);
-    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(tx, ty); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.fillRect(tx - 2, ty - 2, 4, 4);
-  }
-
-  // Firebreak progress arc
-  if (ff.makingBreak) {
-    const prog = 1 - ff.breakProgress / FF_BREAK_TICKS;
-    ctx.strokeStyle = '#86efac';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(px, py, r + 4, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2);
-    ctx.stroke();
+  // Warning icon above FF
+  if (ff.warnLevel>=2) {
+    ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle = ff.warnLevel===3 && _rt%10<5 ? '#ff4444' : '#fbbf24';
+    ctx.fillText('!', px, py-r-3);
+    ctx.textAlign='left';
   }
 }
 
-// -----------------------------------------------------------
-// Hover preview
-// -----------------------------------------------------------
-function drawHover(hx, hy, mode, G) {
-  const px = hx * TILE_PX, py = hy * TILE_PX;
-  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(px + 1, py + 1, TILE_PX - 2, TILE_PX - 2);
-
-  if (mode === 'heli_drop') {
-    // Show splash radius
-    ctx.fillStyle = 'rgba(100, 200, 255, 0.20)';
-    for (const [dx, dy] of NEIGHBORS) {
-      const nx = hx + dx, ny = hy + dy;
-      if (nx >= 0 && nx < GRID && ny >= 0 && ny < GRID) {
-        ctx.fillRect(nx * TILE_PX, ny * TILE_PX, TILE_PX, TILE_PX);
-      }
-    }
-    ctx.fillStyle = 'rgba(100, 200, 255, 0.45)';
-    ctx.fillRect(px, py, TILE_PX, TILE_PX);
-  } else if (mode === 'plane_run') {
-    // Show the drop line (perpendicular to wind)
-    const wv = W_VEC[G.wind.dir];
-    const perpDx = -wv[1], perpDy = wv[0];
-    const planeLine = getPlaneLine(G.player);
-    const half = Math.floor(planeLine / 2);
-    ctx.fillStyle = 'rgba(100, 200, 255, 0.35)';
-    for (let i = -half; i <= half; i++) {
-      const tx = Math.round(hx + perpDx * i);
-      const ty = Math.round(hy + perpDy * i);
-      if (tx >= 0 && tx < GRID && ty >= 0 && ty < GRID) {
-        ctx.fillRect(tx * TILE_PX, ty * TILE_PX, TILE_PX, TILE_PX);
-        // Also show direction of run
-        const ax = Math.round(tx + wv[0]), ay = Math.round(ty + wv[1]);
-        if (ax >= 0 && ax < GRID && ay >= 0 && ay < GRID) {
-          ctx.fillStyle = 'rgba(100, 200, 255, 0.18)';
-          ctx.fillRect(ax * TILE_PX, ay * TILE_PX, TILE_PX, TILE_PX);
-          ctx.fillStyle = 'rgba(100, 200, 255, 0.35)';
-        }
-      }
-    }
-  } else if (mode === 'firebreak') {
-    ctx.fillStyle = 'rgba(139, 115, 85, 0.5)';
-    ctx.fillRect(px, py, TILE_PX, TILE_PX);
-  } else if (mode === 'deploy_ff') {
-    ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
-    ctx.fillRect(px, py, TILE_PX, TILE_PX);
-  }
+function _drawGrid() {
+  ctx.strokeStyle='rgba(0,0,0,0.1)'; ctx.lineWidth=0.5;
+  for (let x=0;x<=GRID;x++) { ctx.beginPath();ctx.moveTo(x*TILE_PX,0);ctx.lineTo(x*TILE_PX,canvas.height);ctx.stroke(); }
+  for (let y=0;y<=GRID;y++) { ctx.beginPath();ctx.moveTo(0,y*TILE_PX);ctx.lineTo(canvas.width,y*TILE_PX);ctx.stroke(); }
 }
 
-// -----------------------------------------------------------
-// Wind arrow canvas
-// -----------------------------------------------------------
-function renderWindArrow(wind) {
-  const W = windCvs.width, H = windCvs.height;
-  windCtx.clearRect(0, 0, W, H);
+// ============================================================
+// WIND ARROW CANVAS
+// ============================================================
+function _renderWindArrow(wind) {
+  const W=windCvs.width, H=windCvs.height;
+  windCtx.clearRect(0,0,W,H);
+  windCtx.fillStyle='#1f2937';
+  windCtx.beginPath(); windCtx.arc(W/2,H/2,W/2-1,0,Math.PI*2); windCtx.fill();
 
-  // Background
-  windCtx.fillStyle = '#1f2937';
+  windCtx.font='bold 8px Courier New'; windCtx.fillStyle='#374151'; windCtx.textAlign='center'; windCtx.textBaseline='middle';
+  windCtx.fillText('N',W/2,6); windCtx.fillText('S',W/2,H-6);
+  windCtx.fillText('W',6,H/2); windCtx.fillText('E',W-6,H/2);
+
+  const v=W_VEC[wind.dir], cx=W/2, cy=H/2, len=17;
+  const strC={1:'#86efac',2:'#fbbf24',3:'#f87171'};
+  const ang=Math.atan2(v[1],v[0]);
+  windCtx.strokeStyle=strC[wind.str]; windCtx.fillStyle=strC[wind.str]; windCtx.lineWidth=2.5;
   windCtx.beginPath();
-  windCtx.arc(W / 2, H / 2, W / 2 - 2, 0, Math.PI * 2);
-  windCtx.fill();
-
-  // Cardinal labels
-  windCtx.font = 'bold 8px Courier New';
-  windCtx.fillStyle = '#4b5563';
-  windCtx.textAlign = 'center';
-  windCtx.textBaseline = 'middle';
-  windCtx.fillText('N', W / 2, 6);
-  windCtx.fillText('S', W / 2, H - 6);
-  windCtx.fillText('W', 6, H / 2);
-  windCtx.fillText('E', W - 6, H / 2);
-
-  // Wind direction arrow
-  const vec = W_VEC[wind.dir];
-  const cx = W / 2, cy = H / 2;
-  const len = 16;
-  const angle = Math.atan2(vec[1], vec[0]);
-
-  const strColors = { 1: '#86efac', 2: '#fbbf24', 3: '#f87171' };
-  windCtx.strokeStyle = strColors[wind.str];
-  windCtx.fillStyle   = strColors[wind.str];
-  windCtx.lineWidth = 2.5;
-
-  // Shaft
-  windCtx.beginPath();
-  windCtx.moveTo(cx - vec[0] * len * 0.5, cy - vec[1] * len * 0.5);
-  windCtx.lineTo(cx + vec[0] * len * 0.6, cy + vec[1] * len * 0.6);
+  windCtx.moveTo(cx-v[0]*len*0.45, cy-v[1]*len*0.45);
+  windCtx.lineTo(cx+v[0]*len*0.55, cy+v[1]*len*0.55);
   windCtx.stroke();
-
   // Arrowhead
-  const ax = cx + vec[0] * len;
-  const ay = cy + vec[1] * len;
+  const ax=cx+v[0]*len, ay=cy+v[1]*len;
   windCtx.beginPath();
-  windCtx.moveTo(ax, ay);
-  windCtx.lineTo(ax - Math.cos(angle - 0.5) * 8, ay - Math.sin(angle - 0.5) * 8);
-  windCtx.lineTo(ax - Math.cos(angle + 0.5) * 8, ay - Math.sin(angle + 0.5) * 8);
-  windCtx.closePath();
-  windCtx.fill();
+  windCtx.moveTo(ax,ay);
+  windCtx.lineTo(ax-Math.cos(ang-0.5)*8,ay-Math.sin(ang-0.5)*8);
+  windCtx.lineTo(ax-Math.cos(ang+0.5)*8,ay-Math.sin(ang+0.5)*8);
+  windCtx.closePath(); windCtx.fill();
 
-  // Changing indicator
-  if (wind.changeFlash > 0) {
-    windCtx.strokeStyle = `rgba(255,255,100,${wind.changeFlash / 120})`;
-    windCtx.lineWidth = 3;
-    windCtx.beginPath();
-    windCtx.arc(W / 2, H / 2, W / 2 - 2, 0, Math.PI * 2);
-    windCtx.stroke();
+  // Wind-change flash
+  if (wind.changeFlash>0) {
+    windCtx.strokeStyle=`rgba(255,255,100,${wind.changeFlash/120})`;
+    windCtx.lineWidth=3;
+    windCtx.beginPath(); windCtx.arc(W/2,H/2,W/2-1,0,Math.PI*2); windCtx.stroke();
   }
 }
 
-// -----------------------------------------------------------
-// HUD top-bar text updates
-// -----------------------------------------------------------
-function renderHUD(G) {
-  const { contract, wind, water, budget, elapsed, firefighters, map } = G;
+// ============================================================
+// HUD — top bar
+// ============================================================
+function _renderHUD(G) {
+  const sec=Math.floor(G.elapsed/1000);
+  const rem=Math.max(0,G.contract.timeLimitSec-sec);
+  const mm=String(Math.floor(rem/60)).padStart(2,'0'), ss=String(rem%60).padStart(2,'0');
+  const timerEl=document.getElementById('disp-timer');
+  timerEl.textContent=`${mm}:${ss}`;
+  timerEl.className=rem<=30?'urgent':'';
 
-  // Timer
-  const sec = Math.floor(elapsed / 1000);
-  const remaining = Math.max(0, contract.timeLimitSec - sec);
-  const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
-  const ss = String(remaining % 60).padStart(2, '0');
-  document.getElementById('disp-timer').textContent = `${mm}:${ss}`;
+  const strEl=document.getElementById('disp-wind-str');
+  document.getElementById('disp-wind-dir').textContent=W_NAME[G.wind.dir];
+  strEl.textContent=W_STR_NAME[G.wind.str];
+  strEl.className=`str-${['','light','moderate','strong'][G.wind.str]}`;
+  document.getElementById('wind-change-fill').style.width=`${(1-windChangePct(G.wind))*100}%`;
 
-  // Wind
-  document.getElementById('disp-wind-dir').textContent = W_NAME[wind.dir];
-  const strEl = document.getElementById('disp-wind-str');
-  strEl.textContent = W_STR_NAME[wind.str];
-  strEl.className = wind.str === 1 ? 'str-light' : wind.str === 2 ? 'str-moderate' : 'str-strong';
+  document.getElementById('disp-water').textContent=Math.floor(G.water);
+  document.getElementById('disp-money').textContent=G.budget;
 
-  // Wind change bar
-  const pct = windChangePct(wind) * 100;
-  document.getElementById('wind-change-fill').style.width = `${100 - pct}%`;
+  const anyDanger=G.firefighters.some(f=>f.warnLevel>=2);
+  document.getElementById('danger-warn').classList.toggle('hidden',!anyDanger);
 
-  // Resources
-  document.getElementById('disp-water').textContent = Math.floor(water);
-  document.getElementById('disp-money').textContent = budget;
-
-  // Danger warning
-  const inDanger = firefighters.some(f => f.inDanger);
-  document.getElementById('danger-warn').classList.toggle('hidden', !inDanger);
+  // Grace period overlay
+  const graceEl=document.getElementById('grace-overlay');
+  if (graceEl) {
+    if (G.graceRemaining>0) {
+      graceEl.classList.remove('hidden');
+      const gm=document.getElementById('grace-msg');
+      if (gm) gm.textContent=`SETUP PHASE — ${Math.ceil(G.graceRemaining/1000)}s`;
+    } else graceEl.classList.add('hidden');
+  }
 }
 
-// -----------------------------------------------------------
-// Sidebar updates (throttled via G.sidebarDirty)
-// -----------------------------------------------------------
-function renderSidebar(G, dangerZones) {
-  renderFFList(G, dangerZones);
-  renderAerialList(G);
-  renderFireStatus(G);
-  renderSelectedInfo(G);
+// ============================================================
+// RIGHT PANEL
+// ============================================================
+function _renderRightPanel(G, dangerZones) {
+  _renderFFList(G);
+  _renderAerialList(G);
+  _renderFireStatus(G);
+  _renderSelectedInfo(G);
 }
 
-function renderFFList(G, dangerZones) {
-  const el = document.getElementById('ff-list');
-  let html = '';
+function _renderFFList(G) {
+  const el=document.getElementById('ff-list'); if(!el)return;
+  if (!G.firefighters.length) { el.innerHTML='<div style="color:#6b7280;font-size:0.78em">None deployed</div>'; return; }
+  let h='';
   for (const ff of G.firefighters) {
-    const hpPct = (ff.hp / ff.maxHp) * 100;
-    const hpClass = hpPct > 60 ? '' : hpPct > 30 ? 'mid' : 'low';
-    const danger  = ff.inDanger;
-    const sel     = G.selectedFF && G.selectedFF.id === ff.id;
-    html += `<div class="ff-item${danger ? ' danger' : ''}${sel ? ' selected' : ''}"
-                  data-ffid="${ff.id}" onclick="gameSelectFF(${ff.id})">
-      <div class="ff-name">FF #${ff.id + 1}</div>
-      <div class="ff-hp">
-        <div class="hp-bar"><div class="hp-fill ${hpClass}" style="width:${hpPct}%"></div></div>
-        ${ff.hp}/${ff.maxHp} HP
-      </div>
-      <div class="ff-status">${ff.status}${danger ? ' ⚠' : ''}</div>
+    const pct=ff.hp/ff.maxHp*100;
+    const hpCls=pct>60?'hp-hi':pct>30?'hp-mid':'hp-lo';
+    const wCls=ff.warnLevel>=3?'warn-3':ff.warnLevel>=2?'warn-2':ff.warnLevel>=1?'warn-1':'';
+    const sel=G.selectedFF&&G.selectedFF.id===ff.id?' selected':'';
+    const stLbl=ff.warnLevel>=2?'danger':ff.status==='Suppressing'?'suppressing':ff.status==='Moving'?'moving':ff.status==='Firebreak'?'break':'';
+    const stTxt=ff.warnLevel>=2?'DANGER!':ff.status;
+    h+=`<div class="ff-item ${wCls}${sel}" onclick="gameSelectFF(${ff.id})">
+      <div class="ff-row1"><span class="ff-name">FF #${ff.id+1}</span><span class="ff-status-label ${stLbl}">${stTxt}</span></div>
+      <div class="hp-bar"><div class="hp-fill ${hpCls}" style="width:${pct}%"></div></div>
     </div>`;
   }
-  if (!G.firefighters.length) html = '<div style="color:#6b7280;font-size:0.78em">None deployed</div>';
-  el.innerHTML = html;
+  el.innerHTML=h;
 }
 
-function renderAerialList(G) {
-  const el = document.getElementById('aerial-list');
-  let html = '';
+function _renderAerialList(G) {
+  const el=document.getElementById('aerial-list'); if(!el)return;
+  let h='';
   for (const a of G.aerials) {
     if (!a.count) continue;
-    const cdSec  = Math.ceil(a.cooldownMs / 1000);
-    const pct    = a.ready ? 100 : (1 - a.cooldownMs / a.maxCooldownMs) * 100;
-    const rdyStr = a.ready ? 'READY' : `${cdSec}s`;
-    const rdyCls = a.ready ? 'ready' : '';
-    html += `<div class="aerial-item">
-      <div class="aerial-name">${a.label} x${a.count}</div>
-      <div class="cd-bar"><div class="cd-fill ${rdyCls}" style="width:${pct}%"></div></div>
-      <div class="aerial-cd ${rdyCls}">${rdyStr} | ${a.waterCost} water</div>
+    const pct=a.ready?100:(1-a.cooldownMs/a.maxCooldownMs)*100;
+    const cdSec=Math.ceil(a.cooldownMs/1000);
+    h+=`<div class="aerial-item">
+      <div class="aerial-name">${a.label} ×${a.count}</div>
+      <div class="aerial-cost">${a.waterCost} water</div>
+      <div class="cd-bar"><div class="cd-fill${a.ready?' ready':''}" style="width:${pct}%"></div></div>
+      <div class="aerial-status${a.ready?' ready':''}">${a.ready?'READY':`${cdSec}s cooldown`}</div>
     </div>`;
   }
-  if (!html) html = '<div style="color:#6b7280;font-size:0.78em">None available</div>';
-  el.innerHTML = html;
+  if (!h) h='<div style="color:#6b7280;font-size:0.78em">No air support</div>';
+  el.innerHTML=h;
 }
 
-function renderFireStatus(G) {
-  const flammable = countFlammable(G.map);
-  const burned    = countBurned(G.map);
-  const active    = countFire(G.map);
-  const burnPct   = flammable ? Math.round(burned / flammable * 100) : 0;
-  const losePct   = Math.round(BURN_LOSE_PCT * 100);
-
-  document.getElementById('fire-status-info').innerHTML =
-    `<div>Active fires: <b>${active}</b></div>
-     <div>Burned: <b>${burnPct}%</b> (lose at ${losePct}%)</div>
-     <div class="burn-bar"><div class="burn-fill" style="width:${burnPct}%"></div></div>`;
+function _renderFireStatus(G) {
+  const el=document.getElementById('fire-status-info'); if(!el)return;
+  const flam=countFlammable(G.map), burned=countBurned(G.map), active=countFire(G.map);
+  const pct=flam?Math.round(burned/flam*100):0;
+  const losePct=Math.round(BURN_LOSE_PCT*100);
+  el.innerHTML=`<div class="fs-row"><span>Active fires</span><span class="fs-val">${active}</span></div>
+    <div class="fs-row"><span>Burned</span><span class="fs-val">${pct}%</span></div>
+    <div class="burn-bar"><div class="burn-fill" style="width:${Math.min(100,pct/losePct*100)}%"></div></div>
+    <div style="color:#6b7280;font-size:0.72em;margin-top:4px">Lose at ${losePct}%</div>`;
 }
 
-function renderSelectedInfo(G) {
-  const el = document.getElementById('selected-info');
+function _renderSelectedInfo(G) {
+  const el=document.getElementById('selected-info'); if(!el)return;
   if (G.selectedFF) {
-    const ff = G.selectedFF;
-    el.innerHTML = `<b>Firefighter #${ff.id + 1}</b><br>
-      HP: ${ff.hp}/${ff.maxHp}<br>
-      Pos: (${ff.x}, ${ff.y})<br>
-      Status: ${ff.status}`;
+    const ff=G.selectedFF;
+    el.innerHTML=`<strong>FF #${ff.id+1}</strong><br>HP: ${ff.hp}/${ff.maxHp}<br>Status: ${ff.status}${ff.warnLevel>=2?'<br><span style="color:#ef4444;font-weight:bold">⚠ IN DANGER — MOVE NOW</span>':''}`;
   } else if (G.actionMode) {
-    const labels = {
-      heli_drop: 'Click map to drop water (helicopter)',
-      plane_run: 'Click map to set bomb run line',
-      deploy_ff: 'Click tile to deploy firefighter',
-      move: 'Click firefighter, then destination',
-      firebreak: 'Select firefighter, click target tile',
-    };
-    el.textContent = labels[G.actionMode] || G.actionMode;
+    const hints={move:'Click FF then click destination',heli_drop:'Click target tile',plane_run:'Click center of drop line',deploy_ff:'Click empty tile',firebreak:'Click FF then target tile'};
+    el.innerHTML=`<span style="color:#60a5fa">${hints[G.actionMode]||G.actionMode}</span>`;
   } else {
-    el.textContent = 'Nothing selected';
+    el.textContent='Click a unit or choose an action';
   }
 }
 
-// -----------------------------------------------------------
-// Contract screen rendering
-// -----------------------------------------------------------
-function renderContractScreen(player) {
-  document.getElementById('disp-budget').textContent = player.budget;
-  document.getElementById('disp-done').textContent = Object.keys(player.done).length;
+// ============================================================
+// BOTTOM ACTION BAR
+// ============================================================
+function _renderBottomBar(G) {
+  const el=document.getElementById('action-btns'); if(!el)return;
+  const heli=G.aerials.find(a=>a.type==='helicopter');
+  const plane=G.aerials.find(a=>a.type==='plane');
+  const actions=[
+    {id:'move',       icon:'🚶', label:'Move FF',       cost:'Free',         hint:'',       enabled:G.firefighters.length>0, aerial:null},
+    {id:'deploy_ff',  icon:'🚒', label:'Deploy FF',     cost:`$${COST_FF}`,  hint:'',       enabled:G.budget>=COST_FF, aerial:null},
+    {id:'firebreak',  icon:'⛏',  label:'Firebreak',     cost:'Time',         hint:'',       enabled:G.firefighters.length>0, aerial:null},
+    {id:'heli_drop',  icon:'🚁', label:'Heli Drop',     cost:heli?`${heli.waterCost}💧`:'N/A', hint:'', enabled:heli&&heli.ready&&G.water>=heli?.waterCost, aerial:heli},
+    {id:'plane_run',  icon:'✈',  label:'Plane Run',     cost:plane?`${plane.waterCost}💧`:'N/A', hint:'', enabled:plane&&plane.ready&&G.water>=plane?.waterCost, aerial:plane},
+  ];
+  let h='';
+  for (const a of actions) {
+    if ((a.id==='heli_drop'&&(!heli||!heli.count))||(a.id==='plane_run'&&(!plane||!plane.count))) continue;
+    const active=G.actionMode===a.id;
+    const dis=!a.enabled;
+    let cdBar='';
+    if (a.aerial&&!a.aerial.ready) {
+      const pct=(1-a.aerial.cooldownMs/a.aerial.maxCooldownMs)*100;
+      cdBar=`<div class="act-btn-cdbar" style="width:${pct}%"></div>`;
+    }
+    if (a.aerial&&a.aerial.ready) cdBar=`<div class="act-btn-cdbar ready" style="width:100%"></div>`;
+    h+=`<button class="act-btn${active?' active':''}${dis?' disabled':''}" onclick="gameSetAction('${a.id}')">
+      <span class="ab-icon">${a.icon}</span>
+      <span class="ab-label">${a.label}</span>
+      <span class="ab-cost">${a.cost}</span>
+      ${cdBar}
+    </button>`;
+  }
+  el.innerHTML=h;
+}
 
-  const done = Object.keys(player.done).length;
-  let html = '';
+// ============================================================
+// CONTRACT SCREEN
+// ============================================================
+function renderContractScreen(player) {
+  document.getElementById('disp-budget').textContent=player.budget;
+  document.getElementById('disp-done').textContent=Object.keys(player.done).length;
+  const done=Object.keys(player.done).length;
+  let h='';
   for (const c of CONTRACTS) {
-    const locked    = done < c.requiredDone;
-    const completed = player.done[c.id];
-    const diffColor = c.difficulty === 'EASY' ? '#4ade80' : c.difficulty === 'MEDIUM' ? '#fbbf24' : '#f87171';
-    html += `<div class="contract-card${locked ? ' locked' : ''}${completed ? ' completed' : ''}"
-               onclick="gameStartContract(${c.id})">
+    const locked=done<c.requiredDone, comp=player.done[c.id];
+    const dCls=c.difficulty==='EASY'?'diff-easy':c.difficulty==='MEDIUM'?'diff-medium':'diff-hard';
+    h+=`<div class="contract-card${locked?' locked':''}${comp?' completed':''}" onclick="gameShowBriefing(${c.id})">
       <h3>${c.name}</h3>
       <div class="c-desc">${c.description}</div>
-      <div class="c-row"><span class="c-label">Difficulty</span><span class="c-val" style="color:${diffColor}">${c.difficulty}</span></div>
-      <div class="c-row"><span class="c-label">Time Limit</span><span class="c-val">${c.timeLimitSec / 60} min</span></div>
-      <div class="c-row"><span class="c-label">Firefighters</span><span class="c-val">${c.startFF}</span></div>
-      <div class="c-row"><span class="c-label">Helicopter</span><span class="c-val">${c.startHeli}</span></div>
-      <div class="c-row"><span class="c-label">Plane</span><span class="c-val">${c.startPlane}</span></div>
-      <div class="c-reward">Base reward: $${c.baseReward}</div>
-      ${completed ? `<div class="c-completed">Completed: ${completed}</div>` : ''}
-      ${locked ? '<div style="color:#6b7280;font-size:0.8em;margin-top:4px">Complete previous missions first</div>' : ''}
+      <div class="c-row"><span class="c-label">Difficulty</span><span class="c-val ${dCls}">${c.difficulty}</span></div>
+      <div class="c-row"><span class="c-label">Time Limit</span><span class="c-val">${c.timeLimitSec/60} min</span></div>
+      <div class="c-row"><span class="c-label">Base Reward</span><span class="c-val">$${c.baseReward}</span></div>
+      ${comp?`<div class="c-done">Completed: ${comp}</div>`:''}
+      ${locked?`<div class="c-lock">Complete previous missions first</div>`:''}
     </div>`;
   }
-  document.getElementById('contract-cards').innerHTML = html;
+  document.getElementById('contract-cards').innerHTML=h;
 
-  // Upgrades
-  let uhtml = '';
+  let uh='';
   for (const def of UPGRADE_DEFS) {
-    const level = getUpgradeLevel(player, def.id);
-    const maxed = level >= def.maxLevel;
-    const cost  = maxed ? '—' : `$${def.costs[level]}`;
-    const able  = canUpgrade(player, def.id);
-    uhtml += `<div class="upgrade-card">
+    const lvl=getUpgradeLevel(player,def.id), maxed=lvl>=def.maxLevel;
+    const cost=maxed?'—':`$${def.costs[lvl]}`, able=canUpgrade(player,def.id);
+    let pips='';
+    for (let i=0;i<def.maxLevel;i++) pips+=`<div class="up-pip${i<lvl?' filled':''}"></div>`;
+    uh+=`<div class="upgrade-card">
       <h4>${def.name}</h4>
       <div class="up-desc">${def.desc}</div>
-      <div class="up-level">Level: ${level}/${def.maxLevel}</div>
-      <button onclick="gameBuyUpgrade('${def.id}')" ${able ? '' : 'disabled'}>
-        ${maxed ? 'MAXED' : `Upgrade (${cost})`}
-      </button>
+      <div class="up-level-bar">${pips}</div>
+      <button onclick="gameBuyUpgrade('${def.id}')" ${able?'':'disabled'}>${maxed?'MAXED':`Upgrade (${cost})`}</button>
     </div>`;
   }
-  document.getElementById('upgrade-cards').innerHTML = uhtml;
+  document.getElementById('upgrade-cards').innerHTML=uh;
 }
 
-// -----------------------------------------------------------
-// Result screen
-// -----------------------------------------------------------
+// ============================================================
+// BRIEFING SCREEN
+// ============================================================
+function renderBriefingScreen(contract) {
+  document.getElementById('briefing-box').querySelector('h2').textContent=contract.name;
+  document.getElementById('brief-subtitle').textContent=`Difficulty: ${contract.difficulty}`;
+  document.getElementById('brief-desc').textContent=contract.description;
+  const stats=[
+    {label:'Time Limit', val:`${contract.timeLimitSec/60} min`},
+    {label:'Firefighters', val:contract.startFF},
+    {label:'Helicopter', val:contract.startHeli},
+    {label:'Plane', val:contract.startPlane||0},
+    {label:'Water', val:contract.waterSupply},
+    {label:'Budget', val:`$${contract.startBudget}`},
+    {label:'Base Reward', val:`$${contract.baseReward}`},
+  ];
+  document.getElementById('brief-stats').innerHTML=stats.map(s=>
+    `<div class="brief-stat"><div class="bs-label">${s.label}</div><div class="bs-val">${s.val}</div></div>`
+  ).join('');
+}
+
+// ============================================================
+// RESULT SCREEN
+// ============================================================
 function renderResultScreen(result) {
-  const ratingColors = { S: 'rating-S', A: 'rating-A', B: 'rating-B', C: 'rating-C', FAIL: 'rating-FAIL' };
-  document.getElementById('result-rating-badge').textContent = result.rating;
-  document.getElementById('result-rating-badge').className   = ratingColors[result.rating] || '';
-  document.getElementById('result-title').textContent = result.won ? 'Mission Complete' : 'Mission Failed';
+  const rMap={S:'rating-S',A:'rating-A',B:'rating-B',C:'rating-C',FAIL:'rating-FAIL'};
+  const badge=document.getElementById('result-rating-badge');
+  badge.textContent=result.rating; badge.className=`rating-badge ${rMap[result.rating]||''}`;
+  document.getElementById('result-title').textContent=result.won?'Mission Complete':'Mission Failed';
+  document.getElementById('result-stats-list').innerHTML=result.statsRows.map(r=>
+    `<div class="rs-row"><span class="rs-label">${r.label}</span><span class="rs-val ${r.cls||''}">${r.val}</span></div>`
+  ).join('');
+  document.getElementById('result-payout').textContent=`Earned: $${result.earned}`;
 
-  let statsHtml = '';
-  for (const row of result.statsRows) {
-    statsHtml += `<div class="rs-row">
-      <span class="rs-label">${row.label}</span>
-      <span class="rs-val ${row.cls || ''}">${row.val}</span>
-    </div>`;
-  }
-  document.getElementById('result-stats-list').innerHTML = statsHtml;
-  document.getElementById('result-payout').textContent = `Earned: $${result.earned}`;
+  // Buttons: retry + optional next
+  const nextId=result.won?result.nextContractId:null;
+  const nextContract=nextId!=null?getContract(nextId):null;
+  let btns=`<button class="result-btn secondary" onclick="gameRetry()">Retry</button>
+    <button class="result-btn primary" onclick="gameBackToMenu()">Menu</button>`;
+  if (nextContract) btns=`<button class="result-btn secondary" onclick="gameRetry()">Retry</button>
+    <button class="result-btn primary" onclick="gameShowBriefing(${nextId})">Next: ${nextContract.name} →</button>`;
+  document.getElementById('result-btns').innerHTML=btns;
 }
 // ============================================================
-// MAIN GAME LOGIC & LOOP
+// GAME LOGIC — v2 (grace period, micro-rewards, briefing,
+//               audio, close-call bonus, smooth loop)
 // ============================================================
 
-// Player persistent state
-const PLAYER = {
-  budget: 5000,
-  done: {},      // contractId -> rating string
-  upgrades: {},
-};
-
-// Active game state (null when not playing)
+const PLAYER = { budget: 5000, done: {}, upgrades: {} };
 let G = null;
+let _currentContractId = null;
 
-// Screens (lazy load to wait for DOM)
-function getScreens() {
-  return {
-    contract: document.getElementById('screen-contract'),
-    game:     document.getElementById('screen-game'),
-    result:   document.getElementById('screen-result'),
-  };
-}
-
-function showScreen(name) {
-  const screens = getScreens();
-  for (const [k, el] of Object.entries(screens)) {
-    if (el) el.classList.toggle('active', k === name);
-  }
+// ---- Screen management ----
+function _showScreen(name) {
+  ['contract','briefing','game','result'].forEach(id => {
+    const el = document.getElementById('screen-'+id);
+    if (el) el.classList.toggle('active', id === name);
+  });
 }
 
 // ============================================================
 // INIT
 // ============================================================
 window.addEventListener('load', () => {
-  try {
-    initRenderer(); // Set up canvas elements
-  } catch (e) {
-    console.error('Failed to initialize renderer:', e);
-    return;
-  }
+  try { initRenderer(); } catch(e) { console.error('Renderer init failed:', e); return; }
 
-  // UI buttons
+  // Top bar / overlay buttons
   document.getElementById('btn-pause').addEventListener('click', gamePause);
-  document.getElementById('btn-quit').addEventListener('click', () => { stopLoop(); showScreen('contract'); });
+  document.getElementById('btn-quit').addEventListener('click', () => { stopLoop(); _showScreen('contract'); renderContractScreen(PLAYER); });
   document.getElementById('btn-resume').addEventListener('click', gameResume);
   document.getElementById('btn-restart').addEventListener('click', () => {
     document.getElementById('overlay-pause').classList.add('hidden');
-    if (G) gameStartContract(G.contract.id);
+    if (_currentContractId != null) gameStartContract(_currentContractId);
   });
   document.getElementById('btn-menu').addEventListener('click', () => {
     document.getElementById('overlay-pause').classList.add('hidden');
-    stopLoop();
-    showScreen('contract');
-    renderContractScreen(PLAYER);
-  });
-  document.getElementById('btn-continue').addEventListener('click', () => {
-    showScreen('contract');
-    renderContractScreen(PLAYER);
+    stopLoop(); _showScreen('contract'); renderContractScreen(PLAYER);
   });
 
-  // Canvas input
-  canvas.addEventListener('mousemove', onCanvasMouseMove);
-  canvas.addEventListener('click', onCanvasClick);
-  canvas.addEventListener('mouseleave', () => { if (G) { G.hoverX = -1; G.hoverY = -1; } });
+  // Briefing buttons
+  document.getElementById('btn-start-mission').addEventListener('click', () => {
+    if (_currentContractId != null) gameStartContract(_currentContractId);
+  });
+  document.getElementById('btn-back-brief').addEventListener('click', () => {
+    _showScreen('contract'); renderContractScreen(PLAYER);
+  });
+
+  // Canvas
+  canvas.addEventListener('mousemove', _onMouseMove);
+  canvas.addEventListener('click', _onCanvasClick);
+  canvas.addEventListener('mouseleave', () => { if (G) { G.hoverX=-1; G.hoverY=-1; } });
 
   // Keyboard
-  document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && G) { e.preventDefault(); gamePause(); }
-    if (e.code === 'Escape' && G) { G.actionMode = null; G.selectedFF = null; }
+  document.addEventListener('keydown', e => {
+    if (e.code==='Space'&&G) { e.preventDefault(); gamePause(); }
+    if (e.code==='Escape'&&G) { G.actionMode=null; G.selectedFF=null; }
+    if (e.code==='KeyR'&&G) { SFX.click(); if(_currentContractId!=null) gameStartContract(_currentContractId); }
   });
 
-  // Initialize UI and start loop
-  showScreen('contract');
+  // Unlock audio on any click
+  document.addEventListener('click', () => SFX.unlock(), {once:true});
+
+  _showScreen('contract');
   renderContractScreen(PLAYER);
-  requestAnimationFrame(loop);
+  requestAnimationFrame(_loop);
 });
 
 // ============================================================
 // GAME LOOP
 // ============================================================
-let lastTs    = 0;
-let running   = false;
-let accMs     = 0;
+let _lastTs=0, _running=false, _acc=0;
 
-function loop(ts) {
-  requestAnimationFrame(loop);
-  const dt = Math.min(ts - lastTs, 100); // cap at 100ms to avoid spiral
-  lastTs = ts;
-
-  if (running && G && G.phase === 'playing') {
-    accMs += dt;
-    while (accMs >= TICK_MS) {
-      tick();
-      accMs -= TICK_MS;
-    }
+function _loop(ts) {
+  requestAnimationFrame(_loop);
+  const dt = Math.min(ts - _lastTs, 100);
+  _lastTs = ts;
+  SFX.tick();
+  if (_running && G && G.phase==='playing') {
+    _acc += dt;
+    while (_acc >= TICK_MS) { _tick(); _acc -= TICK_MS; }
   }
-
   if (G) render(G);
 }
 
-function stopLoop()  { running = false; }
-function startLoop() { running = true; accMs = 0; }
+function stopLoop()  { _running=false; }
+function startLoop() { _running=true; _acc=0; }
 
 // ============================================================
-// START CONTRACT
+// SHOW BRIEFING
 // ============================================================
-window.gameStartContract = function (id) {
+window.gameShowBriefing = function(id) {
   const contract = getContract(id);
   if (!contract) return;
   const done = Object.keys(PLAYER.done).length;
   if (done < contract.requiredDone) return;
+  _currentContractId = id;
+  renderBriefingScreen(contract);
+  _showScreen('briefing');
+  SFX.click();
+};
 
-  // Build game state
+// ============================================================
+// START CONTRACT
+// ============================================================
+window.gameStartContract = function(id) {
+  _ffIdSeq = 0; // reset ID counter
+  const contract = getContract(id);
+  if (!contract) return;
+  _currentContractId = id;
+
   const firefighters = [];
-  for (let i = 0; i < contract.startFF; i++) {
-    // Spawn at bottom-center staging area
-    const sx = Math.floor(GRID / 2) - Math.floor(contract.startFF / 2) + i;
-    firefighters.push(ffCreate(sx, GRID - 2));
+  const spread = Math.floor(contract.startFF/2);
+  for (let i=0;i<contract.startFF;i++) {
+    firefighters.push(ffCreate(Math.floor(GRID/2)-spread+i, GRID-2));
   }
 
   const aerials = [];
-  if (contract.startHeli > 0) {
-    const a = aerialCreate('helicopter', contract.startHeli);
-    a.waterCost = getHeliWaterCost(PLAYER);
-    a.maxCooldownMs = getHeliCooldown(PLAYER);
+  if (contract.startHeli>0) {
+    const a=aerialCreate('helicopter', contract.startHeli);
+    a.waterCost=getHeliWaterCost(PLAYER);
+    a.maxCooldownMs=getHeliCooldown(PLAYER);
     aerials.push(a);
   }
-  if (contract.startPlane > 0) {
-    aerials.push(aerialCreate('plane', contract.startPlane));
-  }
+  if (contract.startPlane>0) aerials.push(aerialCreate('plane', contract.startPlane));
 
   G = {
-    contract,
-    map:          mapGenerate(contract),
-    wind:         windCreate(contract.startWind.dir, contract.startWind.str),
-    firefighters,
-    aerials,
-    water:        contract.waterSupply,
-    budget:       contract.startBudget,
-    elapsed:      0,
-    tick:         0,
-    waterUsed:    0,
-    unitsLost:    0,
-    initFFCount:  contract.startFF,
-    // UI state
-    selectedFF:   null,
-    actionMode:   null, // 'move','heli_drop','plane_run','deploy_ff','firebreak'
-    hoverX:       -1,
-    hoverY:       -1,
-    player:       PLAYER,
-    phase:        'playing', // 'playing','won','lost'
+    contract, map: mapGenerate(contract),
+    wind: windCreate(contract.startWind.dir, contract.startWind.str),
+    firefighters, aerials,
+    water: contract.waterSupply, budget: contract.startBudget,
+    elapsed: 0, tick: 0,
+    graceRemaining: GRACE_MS,
+    waterUsed: 0, unitsLost: 0, initFFCount: contract.startFF,
+    earned: 0, // cumulative micro-rewards earned during mission
+    selectedFF: null, actionMode: null,
+    hoverX: -1, hoverY: -1,
+    player: PLAYER, phase: 'playing',
+    _prevFireTiles: new Set(), // for extinguish detection
   };
 
-  document.getElementById('disp-mission-name').textContent = contract.name;
-  buildActionButtons();
-  showScreen('game');
+  // Snapshot initial fire tile set
+  for (let y=0;y<GRID;y++) for (let x=0;x<GRID;x++)
+    if (G.map[y][x].fireIntensity>0) G._prevFireTiles.add(y*GRID+x);
+
+  document.getElementById('disp-mission-name').textContent=contract.name;
+  _showScreen('game');
   startLoop();
 };
 
 // ============================================================
-// TICK (game logic update)
+// GAME TICK
 // ============================================================
-function tick() {
-  if (!G || G.phase !== 'playing') return;
-
+function _tick() {
+  if (!G||G.phase!=='playing') return;
   G.elapsed += TICK_MS;
   G.tick++;
+  if (G.graceRemaining>0) G.graceRemaining-=TICK_MS;
 
-  // Update wind
+  // Wind
+  const prevDir=G.wind.dir;
   windUpdate(G.wind, TICK_MS);
+  if (G.wind.dir!==prevDir) { SFX.windShift(); _showWindToast(); }
 
-  // Update fire every FIRE_EVERY ticks
-  if (G.tick % FIRE_EVERY === 0) {
+  // Fire (suppressed during grace period)
+  if (G.graceRemaining<=0 && G.tick%FIRE_EVERY===0) {
     fireUpdate(G.map, G.wind);
+    _checkExtinguished();
   }
 
-  // Update firefighters
-  const suppRate = getFFSuppRate(PLAYER);
+  // Firefighters
+  const suppRate  = getFFSuppRate(PLAYER);
   const moveTicks = getFFMoveTicks(PLAYER);
-  const riskDmg  = getFFRiskDamage(PLAYER);
+  const riskDmg   = getFFRiskDamage(PLAYER);
 
-  for (let i = G.firefighters.length - 1; i >= 0; i--) {
-    const ff = G.firefighters[i];
-
-    // Movement
+  for (let i=G.firefighters.length-1;i>=0;i--) {
+    const ff=G.firefighters[i];
     ffUpdateMovement(ff);
-
-    // Firebreak construction
     ffUpdateFirebreak(ff, G.map);
 
-    // Passive suppression on current tile
     if (!ff.moving) {
-      const tile = tileAt(G.map, ff.x, ff.y);
-      if (tile && tile.fireIntensity > 0) {
-        tile.fireIntensity = Math.max(0, tile.fireIntensity - suppRate);
-        if (tile.fireIntensity === 0) tile.burnTime = 0;
-        ff.status = 'Suppressing';
+      const tile=tileAt(G.map, ff.x, ff.y);
+      if (tile&&tile.fireIntensity>0) {
+        const prev=Math.ceil(tile.fireIntensity);
+        tile.fireIntensity=Math.max(0,tile.fireIntensity-suppRate);
+        if (tile.fireIntensity===0) { tile.burnTime=0; SFX.extinguish(); _grantReward(ff.x,ff.y,REWARD_TILE); }
+        ff.status='Suppressing';
       } else if (!ff.makingBreak) {
-        ff.status = 'Idle';
+        ff.status='Idle';
       }
     }
 
-    // Risk check: updates ff.inDanger; damage applied here with upgrade values
-    ffCheckDanger(ff, G.map, G.wind, G.tick);
-    if (ff.inDanger && G.tick % RISK_EVERY === 0) {
-      if (Math.random() < RISK_CHANCE[G.wind.str]) {
-        ff.hp -= riskDmg;
-      }
+    // Danger check
+    const newDanger=ffCheckDanger(ff, G.map, G.wind, G.tick);
+    if (newDanger) SFX.danger();
+
+    // Damage — only at WARN_CRITICAL and on risk-check ticks
+    if (ff.warnLevel>=3 && G.tick%RISK_EVERY===0) {
+      if (Math.random()<RISK_CHANCE[G.wind.str]) ff.hp-=riskDmg;
     }
 
-    // Death
-    if (ff.hp <= 0) {
+    // Close-call bonus when FF escapes danger
+    if (ff.closeCallPending && !ff.inDanger && ff.hp>0) {
+      ff.closeCallPending=false;
+      G.budget+=REWARD_CLOSE; G.earned+=REWARD_CLOSE;
+      addFloatText(ff.x, ff.y, `Close Call! +$${REWARD_CLOSE}`, '#86efac');
+      SFX.closeCall();
+    }
+
+    if (ff.hp<=0) {
       G.unitsLost++;
-      G.firefighters.splice(i, 1);
-      if (G.selectedFF && G.selectedFF.id === ff.id) G.selectedFF = null;
+      triggerShake(4);
+      addFloatText(ff.x,ff.y,'FF Lost!','#ef4444');
+      G.firefighters.splice(i,1);
+      if (G.selectedFF&&G.selectedFF.id===ff.id) G.selectedFF=null;
     }
   }
 
-  // Update aerial cooldowns
-  for (const a of G.aerials) {
-    aerialUpdate(a, TICK_MS);
-  }
+  // Aerial cooldowns
+  G.aerials.forEach(a=>aerialUpdate(a,TICK_MS));
 
-  // Check win/lose
-  checkConditions();
+  _checkConditions();
 }
 
-// ============================================================
-// WIN/LOSE CONDITIONS
-// ============================================================
-function checkConditions() {
-  if (G.phase !== 'playing') return;
-
-  const flammable = countFlammable(G.map);
-  const burned    = countBurned(G.map);
-  const active    = countFire(G.map);
-  const sec       = Math.floor(G.elapsed / 1000);
-
-  // Lose: too much burned
-  if (flammable > 0 && burned / flammable >= BURN_LOSE_PCT) {
-    endGame(false, 'Too much land destroyed');
-    return;
-  }
-
-  // Lose: time limit
-  if (sec >= G.contract.timeLimitSec) {
-    endGame(active === 0, active === 0 ? '' : 'Time ran out');
-    return;
-  }
-
-  // Win: fire fully contained
-  if (active === 0 && sec > 5) {
-    endGame(true, '');
+// ---- Extinguish detection for micro-rewards ----
+function _checkExtinguished() {
+  for (let y=0;y<GRID;y++) for (let x=0;x<GRID;x++) {
+    const key=y*GRID+x;
+    const fi=G.map[y][x].fireIntensity;
+    if (G._prevFireTiles.has(key) && fi===0 && !G.map[y][x].burned) {
+      // Fire was on this tile last fire-update, now it's out (from aerial/FF)
+      G._prevFireTiles.delete(key);
+    } else if (fi>0) {
+      G._prevFireTiles.add(key);
+    }
   }
 }
 
+function _grantReward(x,y,amount) {
+  G.budget+=amount; G.earned+=amount;
+  addFloatText(x,y,`+$${amount}`,'#fbbf24');
+}
+
+// ---- Wind shift toast ----
+function _showWindToast() {
+  const el=document.getElementById('wind-shift-toast');
+  if (!el) return;
+  el.textContent=`WIND SHIFT → ${W_NAME[G.wind.dir]} ${W_STR_NAME[G.wind.str]}`;
+  el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>{ el.style.opacity='0'; },2200);
+}
+
 // ============================================================
-// END GAME
+// WIN / LOSE
 // ============================================================
-function endGame(won, reason) {
-  G.phase = won ? 'won' : 'lost';
+function _checkConditions() {
+  if (G.phase!=='playing') return;
+  const flam=countFlammable(G.map), burned=countBurned(G.map), active=countFire(G.map);
+  const sec=Math.floor(G.elapsed/1000);
+  if (flam&&burned/flam>=BURN_LOSE_PCT) { _endGame(false,'Too much land burned'); return; }
+  if (sec>=G.contract.timeLimitSec) { _endGame(active===0,'Time ran out'); return; }
+  if (active===0&&sec>5) { _endGame(true,''); }
+}
+
+function _endGame(won, reason) {
+  G.phase=won?'won':'lost';
   stopLoop();
+  if (won) SFX.success();
 
-  const flammable = countFlammable(G.map);
-  const burned    = countBurned(G.map);
-  const savedPct  = flammable ? Math.round((flammable - burned) / flammable * 100) : 100;
-  const timeSec   = Math.floor(G.elapsed / 1000);
-  const waterEff  = G.contract.waterSupply > 0
-    ? Math.round((1 - G.waterUsed / G.contract.waterSupply) * 100) : 100;
+  const flam=countFlammable(G.map), burned=countBurned(G.map);
+  const savedPct=flam?Math.round((flam-burned)/flam*100):100;
+  const timeSec=Math.floor(G.elapsed/1000);
+  const waterEff=G.contract.waterSupply>0?Math.round((1-G.waterUsed/G.contract.waterSupply)*100):100;
 
-  // Payment calculation
-  let earned = 0;
-  let rating  = 'FAIL';
+  let earned=0, rating='FAIL';
   if (won) {
-    earned += G.contract.baseReward;
-    earned += savedPct >= 90 ? 1200 : savedPct >= 75 ? 600 : savedPct >= 50 ? 200 : 0;
-    earned -= G.unitsLost * 400;
-    earned += Math.max(0, waterEff) * 3;
-    const timeBonus = timeSec < G.contract.timeLimitSec * 0.60 ? 500 : 0;
-    earned += timeBonus;
-    earned  = Math.max(0, earned);
-
-    const ratio = earned / G.contract.baseReward;
-    rating = ratio >= 1.8 ? 'S' : ratio >= 1.3 ? 'A' : ratio >= 0.85 ? 'B' : 'C';
+    earned+=G.contract.baseReward;
+    earned+= savedPct>=90?1200:savedPct>=75?600:savedPct>=50?200:0;
+    earned-= G.unitsLost*400;
+    earned+= Math.max(0,waterEff)*3;
+    earned+= timeSec<G.contract.timeLimitSec*0.60?500:0;
+    earned+= G.earned; // in-mission micro-rewards already added to budget
+    earned=Math.max(0,earned);
+    const r=earned/G.contract.baseReward;
+    rating=r>=1.8?'S':r>=1.3?'A':r>=0.85?'B':'C';
   }
 
-  PLAYER.budget += earned;
-  if (won) PLAYER.done[G.contract.id] = rating;
+  PLAYER.budget+=earned;
+  if (won) PLAYER.done[G.contract.id]=rating;
 
-  const statsRows = [
-    { label: 'Land Saved',       val: `${savedPct}%`,      cls: savedPct >= 75 ? 'good' : 'bad' },
-    { label: 'Firefighters Lost',val: G.unitsLost,          cls: G.unitsLost === 0 ? 'good' : 'bad' },
-    { label: 'Water Efficiency', val: `${waterEff}%`,       cls: waterEff >= 50 ? 'good' : '' },
-    { label: 'Time Taken',       val: fmtTime(timeSec),     cls: '' },
-    { label: 'Base Reward',      val: `$${G.contract.baseReward}`, cls: '' },
-  ];
-  if (!won && reason) statsRows.push({ label: 'Reason', val: reason, cls: 'bad' });
+  // Find next unlocked contract
+  const nextId=won?CONTRACTS.findIndex(c=>c.id===G.contract.id+1&&PLAYER.done[G.contract.id]):null;
 
-  renderResultScreen({ won, rating, earned, statsRows });
-  showScreen('result');
+  renderResultScreen({
+    won, rating, earned,
+    nextContractId: nextId!=null&&nextId>=0?CONTRACTS[nextId].id:null,
+    statsRows:[
+      {label:'Land Saved',        val:`${savedPct}%`,    cls:savedPct>=75?'rs-good':'rs-bad'},
+      {label:'Firefighters Lost', val:G.unitsLost,        cls:G.unitsLost===0?'rs-good':'rs-bad'},
+      {label:'Water Efficiency',  val:`${waterEff}%`,    cls:waterEff>=50?'rs-good':'rs-neutral'},
+      {label:'Time',              val:_fmtTime(timeSec), cls:'rs-neutral'},
+      {label:'Rewards Earned',    val:`$${G.earned}`,    cls:'rs-neutral'},
+      {label:'Contract Bonus',    val:`$${G.contract.baseReward}`,cls:'rs-neutral'},
+      ...((!won&&reason)?[{label:'Reason',val:reason,cls:'rs-bad'}]:[]),
+    ],
+  });
+  _showScreen('result');
 }
 
-function fmtTime(sec) {
-  return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
-}
+function _fmtTime(sec) { return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`; }
 
 // ============================================================
 // PAUSE
 // ============================================================
 function gamePause() {
-  if (!G || G.phase !== 'playing') return;
-  running = false;
+  if (!G||G.phase!=='playing') return;
+  _running=false;
   document.getElementById('overlay-pause').classList.remove('hidden');
 }
 function gameResume() {
   document.getElementById('overlay-pause').classList.add('hidden');
-  if (G && G.phase === 'playing') startLoop();
+  if (G&&G.phase==='playing') startLoop();
 }
 
 // ============================================================
-// CANVAS INPUT
+// RESULT SCREEN HELPERS
 // ============================================================
-function onCanvasMouseMove(e) {
+window.gameRetry    = function() { if(_currentContractId!=null) gameStartContract(_currentContractId); SFX.click(); };
+window.gameBackToMenu = function() { stopLoop(); _showScreen('contract'); renderContractScreen(PLAYER); SFX.click(); };
+
+// ============================================================
+// INPUT
+// ============================================================
+function _onMouseMove(e) {
   if (!G) return;
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width  / rect.width;
-  const scaleY = canvas.height / rect.height;
-  G.hoverX = Math.floor((e.clientX - rect.left) * scaleX / TILE_PX);
-  G.hoverY = Math.floor((e.clientY - rect.top)  * scaleY / TILE_PX);
+  const r=canvas.getBoundingClientRect();
+  G.hoverX=Math.floor((e.clientX-r.left)/(r.width/canvas.width)/TILE_PX);
+  G.hoverY=Math.floor((e.clientY-r.top)/(r.height/canvas.height)/TILE_PX);
 }
 
-function onCanvasClick(e) {
-  if (!G || G.phase !== 'playing') return;
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width  / rect.width;
-  const scaleY = canvas.height / rect.height;
-  const tx = Math.floor((e.clientX - rect.left) * scaleX / TILE_PX);
-  const ty = Math.floor((e.clientY - rect.top)  * scaleY / TILE_PX);
-  if (tx < 0 || tx >= GRID || ty < 0 || ty >= GRID) return;
-
-  handleTileClick(tx, ty);
+function _onCanvasClick(e) {
+  if (!G||G.phase!=='playing') return;
+  SFX.click();
+  const r=canvas.getBoundingClientRect();
+  const tx=Math.floor((e.clientX-r.left)/(r.width/canvas.width)/TILE_PX);
+  const ty=Math.floor((e.clientY-r.top)/(r.height/canvas.height)/TILE_PX);
+  if (tx<0||tx>=GRID||ty<0||ty>=GRID) return;
+  _handleTileClick(tx,ty);
 }
 
-function handleTileClick(tx, ty) {
-  const mode = G.actionMode;
+function _handleTileClick(tx,ty) {
+  const mode=G.actionMode;
 
-  // --- MOVE mode: first click selects, second click is destination ---
-  if (mode === 'move') {
-    // Click on a firefighter to select it
-    const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
-    if (clickedFF) {
-      G.selectedFF = clickedFF;
-      return;
-    }
-    // If FF already selected, move to tile
-    if (G.selectedFF) {
-      ffMoveTo(G.selectedFF, tx, ty, getFFMoveTicks(PLAYER));
-      G.selectedFF = null;
-      G.actionMode = null;
-      buildActionButtons();
-      return;
-    }
+  if (mode==='move') {
+    const clicked=G.firefighters.find(f=>f.x===tx&&f.y===ty);
+    if (clicked) { G.selectedFF=clicked; return; }
+    if (G.selectedFF) { ffMoveTo(G.selectedFF,tx,ty,getFFMoveTicks(PLAYER)); G.selectedFF=null; G.actionMode=null; return; }
   }
 
-  // --- FIREBREAK mode ---
-  if (mode === 'firebreak') {
-    if (!G.selectedFF) {
-      const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
-      if (clickedFF) { G.selectedFF = clickedFF; return; }
-    } else {
-      ffStartFirebreak(G.selectedFF, G.map, tx, ty);
-      G.selectedFF = null;
-      G.actionMode = null;
-      buildActionButtons();
-      return;
-    }
+  if (mode==='firebreak') {
+    if (!G.selectedFF) { const c=G.firefighters.find(f=>f.x===tx&&f.y===ty); if(c) G.selectedFF=c; return; }
+    ffStartFirebreak(G.selectedFF,G.map,tx,ty); G.selectedFF=null; G.actionMode=null; return;
   }
 
-  // --- DEPLOY FF ---
-  if (mode === 'deploy_ff') {
-    const tile = tileAt(G.map, tx, ty);
-    if (!tile || tile.type === T.WATER || tile.type === T.ROCK) return;
-    if (G.budget < COST_FF) { showMsg('Not enough budget!'); return; }
-    G.firefighters.push(ffCreate(tx, ty));
-    G.budget -= COST_FF;
-    G.actionMode = null;
-    buildActionButtons();
-    return;
+  if (mode==='deploy_ff') {
+    const tile=tileAt(G.map,tx,ty);
+    if (!tile||tile.type===T.WATER||tile.type===T.ROCK) return;
+    if (G.budget<COST_FF) { _showMsg('Not enough budget!'); return; }
+    G.firefighters.push(ffCreate(tx,ty)); G.budget-=COST_FF; G.actionMode=null; return;
   }
 
-  // --- HELI DROP ---
-  if (mode === 'heli_drop') {
-    const heli = G.aerials.find(a => a.type === 'helicopter');
-    if (!heli) return;
-    if (!heli.ready) { showMsg('Helicopter on cooldown!'); return; }
-    if (G.water < heli.waterCost) { showMsg('Not enough water!'); return; }
-    if (aerialDeploy(heli, G.water)) {
-      G.water -= heli.waterCost;
-      G.waterUsed += heli.waterCost;
-      fireHeliDrop(G.map, tx, ty, HELI_INTENSITY_REDUCE);
-      G.actionMode = null;
-      buildActionButtons();
+  if (mode==='heli_drop') {
+    const heli=G.aerials.find(a=>a.type==='helicopter');
+    if (!heli||!heli.ready||G.water<heli.waterCost) { _showMsg('Helicopter not ready!'); return; }
+    if (aerialDeploy(heli,G.water)) {
+      G.water-=heli.waterCost; G.waterUsed+=heli.waterCost;
+      const before=_countFireAt(G.map,tx,ty);
+      fireHeliDrop(G.map,tx,ty,HELI_INTENSITY_REDUCE);
+      addParticles(tx,ty,'water'); SFX.waterDrop(false);
+      triggerShake(2);
+      const saved=before-_countFireAt(G.map,tx,ty);
+      if (saved>0) { _grantReward(tx,ty,saved*REWARD_TILE); SFX.extinguish(); }
+      G.actionMode=null;
     }
     return;
   }
 
-  // --- PLANE RUN ---
-  if (mode === 'plane_run') {
-    const plane = G.aerials.find(a => a.type === 'plane');
-    if (!plane) return;
-    if (!plane.ready) { showMsg('Plane on cooldown!'); return; }
-    if (G.water < plane.waterCost) { showMsg('Not enough water!'); return; }
-    if (aerialDeploy(plane, G.water)) {
-      G.water -= plane.waterCost;
-      G.waterUsed += plane.waterCost;
-      firePlaneRun(G.map, tx, ty, G.wind, getPlaneLine(PLAYER));
-      G.actionMode = null;
-      buildActionButtons();
+  if (mode==='plane_run') {
+    const plane=G.aerials.find(a=>a.type==='plane');
+    if (!plane||!plane.ready||G.water<plane.waterCost) { _showMsg('Plane not ready!'); return; }
+    if (aerialDeploy(plane,G.water)) {
+      G.water-=plane.waterCost; G.waterUsed+=plane.waterCost;
+      const pl=getPlaneLine(PLAYER), wv=W_VEC[G.wind.dir], pd=-wv[1],pe=wv[0];
+      const half=Math.floor(pl/2);
+      let saved=0;
+      for (let i=-half;i<=half;i++) {
+        const bx=Math.round(tx+pd*i), by=Math.round(ty+pe*i);
+        saved+=_countFireAt(G.map,bx,by);
+        addParticles(bx,by,'water');
+      }
+      firePlaneRun(G.map,tx,ty,G.wind,pl);
+      for (let i=-half;i<=half;i++) saved-=_countFireAt(G.map,Math.round(tx+pd*i),Math.round(ty+pe*i));
+      SFX.waterDrop(true); triggerShake(3);
+      if (saved>0) _grantReward(tx,ty,saved*REWARD_TILE);
+      G.actionMode=null;
     }
     return;
   }
 
-  // --- Default: click on firefighter to select / deselect ---
-  const clickedFF = G.firefighters.find(f => f.x === tx && f.y === ty);
-  if (clickedFF) {
-    G.selectedFF = G.selectedFF && G.selectedFF.id === clickedFF.id ? null : clickedFF;
-  } else {
-    // If a FF is selected with no mode, move it
-    if (G.selectedFF) {
-      ffMoveTo(G.selectedFF, tx, ty, getFFMoveTicks(PLAYER));
-      G.selectedFF = null;
-    }
+  // Default: select/deselect FF or move selected FF
+  const clicked=G.firefighters.find(f=>f.x===tx&&f.y===ty);
+  if (clicked) {
+    G.selectedFF=(G.selectedFF&&G.selectedFF.id===clicked.id)?null:clicked;
+  } else if (G.selectedFF) {
+    ffMoveTo(G.selectedFF,tx,ty,getFFMoveTicks(PLAYER));
+    G.selectedFF=null;
   }
+}
+
+function _countFireAt(map,x,y) {
+  let n=0;
+  if (tileAt(map,x,y)?.fireIntensity>0) n++;
+  for (const [dx,dy] of NEIGHBORS) if (tileAt(map,x+dx,y+dy)?.fireIntensity>0) n++;
+  return n;
 }
 
 // ============================================================
-// ACTION BUTTON BUILDING
+// GLOBAL CALLBACKS (called from HTML)
 // ============================================================
-function buildActionButtons() {
-  const el = document.getElementById('action-btns');
-  const heli  = G && G.aerials.find(a => a.type === 'helicopter');
-  const plane = G && G.aerials.find(a => a.type === 'plane');
-
-  const actions = [
-    {
-      id: 'move',
-      label: 'Move Firefighter',
-      hint: 'Select FF → click destination',
-      cost: 'Free',
-      enabled: G && G.firefighters.length > 0,
-    },
-    {
-      id: 'deploy_ff',
-      label: 'Deploy Firefighter',
-      hint: 'Click tile to deploy',
-      cost: `$${COST_FF}`,
-      enabled: G && G.budget >= COST_FF,
-    },
-    {
-      id: 'firebreak',
-      label: 'Create Firebreak',
-      hint: 'Select FF → click target tile',
-      cost: 'Time',
-      enabled: G && G.firefighters.length > 0,
-    },
-    {
-      id: 'heli_drop',
-      label: 'Helicopter Drop',
-      hint: 'Click target tile',
-      cost: heli ? `${heli.waterCost} water` : 'N/A',
-      enabled: heli && heli.ready && G.water >= heli.waterCost,
-    },
-    {
-      id: 'plane_run',
-      label: 'Plane Water Run',
-      hint: 'Click center of run line',
-      cost: plane ? `${plane.waterCost} water` : 'N/A',
-      enabled: plane && plane.ready && G.water >= plane.waterCost,
-    },
-  ];
-
-  let html = '';
-  for (const a of actions) {
-    if (a.id === 'heli_drop' && (!heli || !heli.count)) continue;
-    if (a.id === 'plane_run' && (!plane || !plane.count)) continue;
-    const active  = G && G.actionMode === a.id;
-    const disabled = !a.enabled;
-    html += `<button class="act-btn${active ? ' active' : ''}${disabled ? ' disabled' : ''}"
-                     onclick="gameSetAction('${a.id}')">
-      <span>${a.label}</span>
-      <span class="act-cost">${a.cost}</span>
-      <span class="act-hint">${a.hint}</span>
-    </button>`;
-  }
-  el.innerHTML = html;
-}
-
-window.gameSetAction = function (id) {
-  if (!G || G.phase !== 'playing') return;
-  G.actionMode = G.actionMode === id ? null : id;
-  G.selectedFF = null;
-  buildActionButtons();
-};
-
-window.gameSelectFF = function (id) {
+window.gameSelectFF = function(id) {
   if (!G) return;
-  const ff = G.firefighters.find(f => f.id === id);
-  G.selectedFF = ff || null;
+  const ff=G.firefighters.find(f=>f.id===id);
+  G.selectedFF=ff||null;
 };
 
-window.gameBuyUpgrade = function (id) {
-  if (purchaseUpgrade(PLAYER, id)) {
-    renderContractScreen(PLAYER);
-  }
+window.gameSetAction = function(id) {
+  if (!G||G.phase!=='playing') return;
+  G.actionMode=G.actionMode===id?null:id;
+  G.selectedFF=null;
+  SFX.click();
 };
 
-// ============================================================
-// SMALL NOTIFICATION
-// ============================================================
-function showMsg(msg) {
-  const el = document.getElementById('danger-warn');
-  const prev = el.textContent;
-  el.textContent = msg;
-  el.classList.remove('hidden');
-  setTimeout(() => {
-    el.textContent = prev;
-    if (!G || !G.firefighters.some(f => f.inDanger)) el.classList.add('hidden');
-  }, 1800);
+window.gameBuyUpgrade = function(id) {
+  if (purchaseUpgrade(PLAYER,id)) { renderContractScreen(PLAYER); SFX.success(); }
+};
+
+function _showMsg(txt) {
+  const el=document.getElementById('danger-warn');
+  const prev=el.textContent;
+  el.textContent=txt; el.classList.remove('hidden');
+  clearTimeout(el._msgT);
+  el._msgT=setTimeout(()=>{
+    el.textContent=prev;
+    if (!G||!G.firefighters.some(f=>f.warnLevel>=2)) el.classList.add('hidden');
+  },1800);
 }
 </script>
 </body>
